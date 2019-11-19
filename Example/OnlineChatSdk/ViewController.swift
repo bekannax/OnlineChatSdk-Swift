@@ -14,11 +14,14 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
-
+    @IBAction func openChat(_ sender: Any) {
+        let chatController = storyboard?.instantiateViewController(withIdentifier: "DemoChatController") as! DemoController
+        navigationController?.pushViewController(chatController, animated: true)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
 }
 

@@ -1,0 +1,777 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A91DF6F84B8ADDA1B6B57B93F651F43 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
+		4E480B796AAF0D0485296B48F2ABD33E /* OnlineChatSdk-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C0111B871B5D52E9B55DA76532F8F2A2 /* OnlineChatSdk-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7587E97BF506974AF6F6A49B78EF08AF /* Pods-OnlineChatSdk_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A922434E0906B6862B74C406DC2376ED /* Pods-OnlineChatSdk_Example-dummy.m */; };
+		877616D4221488CAAC0CCB65106F92EF /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABCF315DC34B0D65FDC06BD5C47E4537 /* Command.swift */; };
+		8A0B9EB8991D1B53E1CCC6C966D1BA52 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
+		8A4D7BAAB47A2BC73DB2649DC570DE6E /* Pods-OnlineChatSdk_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ECBD7A2D1C2D4C8EA1D7D37BA41D12B /* Pods-OnlineChatSdk_Tests-dummy.m */; };
+		8C8125106158BBAF730EC093C787BD72 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */; };
+		A8D871164B5ED343D9FF5AB0EBE88192 /* Pods-OnlineChatSdk_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 575DA55EF4BC56E2E7F9127ABE7A28E3 /* Pods-OnlineChatSdk_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B61DE444BE1EB7C89513A66F1599ED13 /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AEF9BCA9F7B3A9543A229C56609432 /* ChatController.swift */; };
+		D57077F1B4219D4B130032D181180A24 /* ChatApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B7932088C0D7E01A53DA4E3FE510880 /* ChatApi.swift */; };
+		E755A5301CE9F36554E6BED5D1C46CF5 /* OnlineChatSdk-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D7DF4591C78213A8775F1ACE153960EA /* OnlineChatSdk-dummy.m */; };
+		FFFDD6C7C2E28FF39D79303DB06AE023 /* Pods-OnlineChatSdk_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1CEA9A7827573BC146B1DB56F7574206 /* Pods-OnlineChatSdk_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D6705DFE1A69E0869352E35AEB0D94BD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EE49958FF486FC5404A5724C7D94C8D0;
+			remoteInfo = "Pods-OnlineChatSdk_Example";
+		};
+		FDEE491E399E8BEAE907A42158C78B11 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 703A72276AA799D9F6776AF21F9FBBC1;
+			remoteInfo = OnlineChatSdk;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		00DDA13354DCA4F40F1997FDADA7CA42 /* OnlineChatSdk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = OnlineChatSdk.framework; path = OnlineChatSdk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		01A4A5141B00DF728F32412BCEB66D36 /* Pods-OnlineChatSdk_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-OnlineChatSdk_Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		09AEF9BCA9F7B3A9543A229C56609432 /* ChatController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatController.swift; path = OnlineChatSdk/Classes/ChatController.swift; sourceTree = "<group>"; };
+		14615AA05F95CA8B36F247500AEC3491 /* OnlineChatSdk.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = OnlineChatSdk.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		18FAAAB49C908B7AEC33FF4BAA2A71A3 /* Pods-OnlineChatSdk_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-OnlineChatSdk_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		1CEA9A7827573BC146B1DB56F7574206 /* Pods-OnlineChatSdk_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-OnlineChatSdk_Tests-umbrella.h"; sourceTree = "<group>"; };
+		2A20AC005391A9D1327605199CFC4ECC /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		2F1CED22613F2AAE9BD6A2C3831E4DA6 /* Pods-OnlineChatSdk_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-OnlineChatSdk_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		325DA660D42FA1E563623E4E3CDB13C3 /* Pods-OnlineChatSdk_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-OnlineChatSdk_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		3E4270A75BF9FC99FDED4F358A946957 /* Pods-OnlineChatSdk_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-OnlineChatSdk_Example.release.xcconfig"; sourceTree = "<group>"; };
+		3F9D8182090913B398FB960F9C47D364 /* Pods_OnlineChatSdk_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_OnlineChatSdk_Example.framework; path = "Pods-OnlineChatSdk_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F0D5C8AD6FC51F8A0A965EA5CC573BD /* Pods-OnlineChatSdk_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-OnlineChatSdk_Example-Info.plist"; sourceTree = "<group>"; };
+		54E37E458C0AC465CBB829C9E07E70E9 /* Pods_OnlineChatSdk_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_OnlineChatSdk_Tests.framework; path = "Pods-OnlineChatSdk_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		575DA55EF4BC56E2E7F9127ABE7A28E3 /* Pods-OnlineChatSdk_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-OnlineChatSdk_Example-umbrella.h"; sourceTree = "<group>"; };
+		57A58A24AE74BA497984E7E58FE91E86 /* Pods-OnlineChatSdk_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-OnlineChatSdk_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		66CCC082299575BA547CEB3CEDE955A4 /* OnlineChatSdk-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "OnlineChatSdk-prefix.pch"; sourceTree = "<group>"; };
+		7AC6161C36FC958B693D919BC395D788 /* Pods-OnlineChatSdk_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-OnlineChatSdk_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		7BB36BD6A86A14876EAB570446FC3C67 /* Pods-OnlineChatSdk_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-OnlineChatSdk_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
+		8ECBD7A2D1C2D4C8EA1D7D37BA41D12B /* Pods-OnlineChatSdk_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-OnlineChatSdk_Tests-dummy.m"; sourceTree = "<group>"; };
+		95BAEA0C56516C312821C0AE97980D1F /* OnlineChatSdk-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "OnlineChatSdk-Info.plist"; sourceTree = "<group>"; };
+		996B4B332409D7E7FA09CC4B2D826C45 /* OnlineChatSdk.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = OnlineChatSdk.xcconfig; sourceTree = "<group>"; };
+		9B7932088C0D7E01A53DA4E3FE510880 /* ChatApi.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChatApi.swift; path = OnlineChatSdk/Classes/ChatApi.swift; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A47B952EB811DA610A668204CBFABD37 /* Pods-OnlineChatSdk_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-OnlineChatSdk_Example.modulemap"; sourceTree = "<group>"; };
+		A922434E0906B6862B74C406DC2376ED /* Pods-OnlineChatSdk_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-OnlineChatSdk_Example-dummy.m"; sourceTree = "<group>"; };
+		ABCF315DC34B0D65FDC06BD5C47E4537 /* Command.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Command.swift; path = OnlineChatSdk/Classes/Command.swift; sourceTree = "<group>"; };
+		C0111B871B5D52E9B55DA76532F8F2A2 /* OnlineChatSdk-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "OnlineChatSdk-umbrella.h"; sourceTree = "<group>"; };
+		CF4B443DBD84B6D63C5835EE5161A81C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		D26B1FE0FAD5C1B7F2E561F5384FB7A4 /* Pods-OnlineChatSdk_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-OnlineChatSdk_Tests-Info.plist"; sourceTree = "<group>"; };
+		D7DF4591C78213A8775F1ACE153960EA /* OnlineChatSdk-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "OnlineChatSdk-dummy.m"; sourceTree = "<group>"; };
+		DD9F6331BA9B7BF7C245D8AF59C00335 /* Pods-OnlineChatSdk_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-OnlineChatSdk_Tests.modulemap"; sourceTree = "<group>"; };
+		DED0F223E5DC4303A4782D3ACB15A64F /* OnlineChatSdk.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = OnlineChatSdk.modulemap; sourceTree = "<group>"; };
+		FEE534B9BD577A51E2BE7BC4CA07E4B6 /* Pods-OnlineChatSdk_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-OnlineChatSdk_Example-frameworks.sh"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		78614699E128AB03F6805700A4F2D50D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A91DF6F84B8ADDA1B6B57B93F651F43 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BE98E545D5088AD5FD8DC3122E54E041 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A0B9EB8991D1B53E1CCC6C966D1BA52 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E144FB3DE4B09B3C96859C17A77CF1C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C8125106158BBAF730EC093C787BD72 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0E29F1B1AADDDE3CA2F7C73BE03086CB /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				DED0F223E5DC4303A4782D3ACB15A64F /* OnlineChatSdk.modulemap */,
+				996B4B332409D7E7FA09CC4B2D826C45 /* OnlineChatSdk.xcconfig */,
+				D7DF4591C78213A8775F1ACE153960EA /* OnlineChatSdk-dummy.m */,
+				95BAEA0C56516C312821C0AE97980D1F /* OnlineChatSdk-Info.plist */,
+				66CCC082299575BA547CEB3CEDE955A4 /* OnlineChatSdk-prefix.pch */,
+				C0111B871B5D52E9B55DA76532F8F2A2 /* OnlineChatSdk-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "Example/Pods/Target Support Files/OnlineChatSdk";
+			sourceTree = "<group>";
+		};
+		12D575CCBA32163E118BDC1F019A63B1 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				CF4B443DBD84B6D63C5835EE5161A81C /* LICENSE */,
+				14615AA05F95CA8B36F247500AEC3491 /* OnlineChatSdk.podspec */,
+				2A20AC005391A9D1327605199CFC4ECC /* README.md */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
+		3E3423C86962A8706DF3152355D47F1F /* OnlineChatSdk */ = {
+			isa = PBXGroup;
+			children = (
+				9B7932088C0D7E01A53DA4E3FE510880 /* ChatApi.swift */,
+				09AEF9BCA9F7B3A9543A229C56609432 /* ChatController.swift */,
+				ABCF315DC34B0D65FDC06BD5C47E4537 /* Command.swift */,
+				12D575CCBA32163E118BDC1F019A63B1 /* Pod */,
+				0E29F1B1AADDDE3CA2F7C73BE03086CB /* Support Files */,
+			);
+			name = OnlineChatSdk;
+			path = ../..;
+			sourceTree = "<group>";
+		};
+		43C8D64CC46B08513D80E5B080FEABA8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00DDA13354DCA4F40F1997FDADA7CA42 /* OnlineChatSdk.framework */,
+				3F9D8182090913B398FB960F9C47D364 /* Pods_OnlineChatSdk_Example.framework */,
+				54E37E458C0AC465CBB829C9E07E70E9 /* Pods_OnlineChatSdk_Tests.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5DEAF1121F1978943E41E05FFC98FB3E /* Pods-OnlineChatSdk_Example */ = {
+			isa = PBXGroup;
+			children = (
+				A47B952EB811DA610A668204CBFABD37 /* Pods-OnlineChatSdk_Example.modulemap */,
+				2F1CED22613F2AAE9BD6A2C3831E4DA6 /* Pods-OnlineChatSdk_Example-acknowledgements.markdown */,
+				01A4A5141B00DF728F32412BCEB66D36 /* Pods-OnlineChatSdk_Example-acknowledgements.plist */,
+				A922434E0906B6862B74C406DC2376ED /* Pods-OnlineChatSdk_Example-dummy.m */,
+				FEE534B9BD577A51E2BE7BC4CA07E4B6 /* Pods-OnlineChatSdk_Example-frameworks.sh */,
+				4F0D5C8AD6FC51F8A0A965EA5CC573BD /* Pods-OnlineChatSdk_Example-Info.plist */,
+				575DA55EF4BC56E2E7F9127ABE7A28E3 /* Pods-OnlineChatSdk_Example-umbrella.h */,
+				325DA660D42FA1E563623E4E3CDB13C3 /* Pods-OnlineChatSdk_Example.debug.xcconfig */,
+				3E4270A75BF9FC99FDED4F358A946957 /* Pods-OnlineChatSdk_Example.release.xcconfig */,
+			);
+			name = "Pods-OnlineChatSdk_Example";
+			path = "Target Support Files/Pods-OnlineChatSdk_Example";
+			sourceTree = "<group>";
+		};
+		80971129FD0FF60FEA29255A0795EA34 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				5DEAF1121F1978943E41E05FFC98FB3E /* Pods-OnlineChatSdk_Example */,
+				B2CC4C2692486F16641A7B75819A33C2 /* Pods-OnlineChatSdk_Tests */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		B2CC4C2692486F16641A7B75819A33C2 /* Pods-OnlineChatSdk_Tests */ = {
+			isa = PBXGroup;
+			children = (
+				DD9F6331BA9B7BF7C245D8AF59C00335 /* Pods-OnlineChatSdk_Tests.modulemap */,
+				18FAAAB49C908B7AEC33FF4BAA2A71A3 /* Pods-OnlineChatSdk_Tests-acknowledgements.markdown */,
+				7BB36BD6A86A14876EAB570446FC3C67 /* Pods-OnlineChatSdk_Tests-acknowledgements.plist */,
+				8ECBD7A2D1C2D4C8EA1D7D37BA41D12B /* Pods-OnlineChatSdk_Tests-dummy.m */,
+				D26B1FE0FAD5C1B7F2E561F5384FB7A4 /* Pods-OnlineChatSdk_Tests-Info.plist */,
+				1CEA9A7827573BC146B1DB56F7574206 /* Pods-OnlineChatSdk_Tests-umbrella.h */,
+				57A58A24AE74BA497984E7E58FE91E86 /* Pods-OnlineChatSdk_Tests.debug.xcconfig */,
+				7AC6161C36FC958B693D919BC395D788 /* Pods-OnlineChatSdk_Tests.release.xcconfig */,
+			);
+			name = "Pods-OnlineChatSdk_Tests";
+			path = "Target Support Files/Pods-OnlineChatSdk_Tests";
+			sourceTree = "<group>";
+		};
+		C0834CEBB1379A84116EF29F93051C60 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		CF1408CF629C7361332E53B88F7BD30C = {
+			isa = PBXGroup;
+			children = (
+				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
+				F3144DF81E2341C20E24CF8435AED4DB /* Development Pods */,
+				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
+				43C8D64CC46B08513D80E5B080FEABA8 /* Products */,
+				80971129FD0FF60FEA29255A0795EA34 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C0834CEBB1379A84116EF29F93051C60 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F3144DF81E2341C20E24CF8435AED4DB /* Development Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3E3423C86962A8706DF3152355D47F1F /* OnlineChatSdk */,
+			);
+			name = "Development Pods";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7D141F2D6108170EBF0AC6093B99B82E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A8D871164B5ED343D9FF5AB0EBE88192 /* Pods-OnlineChatSdk_Example-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8BF0246F1777B0F458B5196B0877A15 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E480B796AAF0D0485296B48F2ABD33E /* OnlineChatSdk-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F1479C4516B9E9E6199DF2362AAD5C5F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FFFDD6C7C2E28FF39D79303DB06AE023 /* Pods-OnlineChatSdk_Tests-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		703A72276AA799D9F6776AF21F9FBBC1 /* OnlineChatSdk */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EEE00C25AF5BC68482C05792FE077251 /* Build configuration list for PBXNativeTarget "OnlineChatSdk" */;
+			buildPhases = (
+				D8BF0246F1777B0F458B5196B0877A15 /* Headers */,
+				E8CDCAAF8A761E5AAE59BFBC9A11C981 /* Sources */,
+				BE98E545D5088AD5FD8DC3122E54E041 /* Frameworks */,
+				71F1688CD0996F3F229BC9EC3B477A17 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OnlineChatSdk;
+			productName = OnlineChatSdk;
+			productReference = 00DDA13354DCA4F40F1997FDADA7CA42 /* OnlineChatSdk.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		9DEB3BD6EDAA33CF52E61BAA092E4BB8 /* Pods-OnlineChatSdk_Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63AE78E86BF0DAF3FB86C3FD1524AEE9 /* Build configuration list for PBXNativeTarget "Pods-OnlineChatSdk_Tests" */;
+			buildPhases = (
+				F1479C4516B9E9E6199DF2362AAD5C5F /* Headers */,
+				6E24C1EA167A0E7430C2FB0AA685B8A5 /* Sources */,
+				E144FB3DE4B09B3C96859C17A77CF1C1 /* Frameworks */,
+				EE6B9875E8543B129460851CF6520D7A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A03DF1341F8D913F74004FC7A55EE746 /* PBXTargetDependency */,
+			);
+			name = "Pods-OnlineChatSdk_Tests";
+			productName = "Pods-OnlineChatSdk_Tests";
+			productReference = 54E37E458C0AC465CBB829C9E07E70E9 /* Pods_OnlineChatSdk_Tests.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		EE49958FF486FC5404A5724C7D94C8D0 /* Pods-OnlineChatSdk_Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B37F102035B11F4BCF075DE27116005F /* Build configuration list for PBXNativeTarget "Pods-OnlineChatSdk_Example" */;
+			buildPhases = (
+				7D141F2D6108170EBF0AC6093B99B82E /* Headers */,
+				E6285BEC29589FD1B6D3908284C27E95 /* Sources */,
+				78614699E128AB03F6805700A4F2D50D /* Frameworks */,
+				77C028D74381DB0833A480DD58FEC7A9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				254B992ED9FDA2906743229BA9BC7745 /* PBXTargetDependency */,
+			);
+			name = "Pods-OnlineChatSdk_Example";
+			productName = "Pods-OnlineChatSdk_Example";
+			productReference = 3F9D8182090913B398FB960F9C47D364 /* Pods_OnlineChatSdk_Example.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFDFE7DC352907FC980B868725387E98 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1100;
+				LastUpgradeCheck = 1100;
+			};
+			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
+			productRefGroup = 43C8D64CC46B08513D80E5B080FEABA8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				703A72276AA799D9F6776AF21F9FBBC1 /* OnlineChatSdk */,
+				EE49958FF486FC5404A5724C7D94C8D0 /* Pods-OnlineChatSdk_Example */,
+				9DEB3BD6EDAA33CF52E61BAA092E4BB8 /* Pods-OnlineChatSdk_Tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		71F1688CD0996F3F229BC9EC3B477A17 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77C028D74381DB0833A480DD58FEC7A9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE6B9875E8543B129460851CF6520D7A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6E24C1EA167A0E7430C2FB0AA685B8A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A4D7BAAB47A2BC73DB2649DC570DE6E /* Pods-OnlineChatSdk_Tests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E6285BEC29589FD1B6D3908284C27E95 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7587E97BF506974AF6F6A49B78EF08AF /* Pods-OnlineChatSdk_Example-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E8CDCAAF8A761E5AAE59BFBC9A11C981 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D57077F1B4219D4B130032D181180A24 /* ChatApi.swift in Sources */,
+				B61DE444BE1EB7C89513A66F1599ED13 /* ChatController.swift in Sources */,
+				877616D4221488CAAC0CCB65106F92EF /* Command.swift in Sources */,
+				E755A5301CE9F36554E6BED5D1C46CF5 /* OnlineChatSdk-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		254B992ED9FDA2906743229BA9BC7745 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OnlineChatSdk;
+			target = 703A72276AA799D9F6776AF21F9FBBC1 /* OnlineChatSdk */;
+			targetProxy = FDEE491E399E8BEAE907A42158C78B11 /* PBXContainerItemProxy */;
+		};
+		A03DF1341F8D913F74004FC7A55EE746 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-OnlineChatSdk_Example";
+			target = EE49958FF486FC5404A5724C7D94C8D0 /* Pods-OnlineChatSdk_Example */;
+			targetProxy = D6705DFE1A69E0869352E35AEB0D94BD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		04EE59200408CF5B718B08EFEB157EC2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3E4270A75BF9FC99FDED4F358A946957 /* Pods-OnlineChatSdk_Example.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-OnlineChatSdk_Example/Pods-OnlineChatSdk_Example-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-OnlineChatSdk_Example/Pods-OnlineChatSdk_Example.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		4E3EB4C0FA6A152C3AD6101B29C005C0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 57A58A24AE74BA497984E7E58FE91E86 /* Pods-OnlineChatSdk_Tests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-OnlineChatSdk_Tests/Pods-OnlineChatSdk_Tests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-OnlineChatSdk_Tests/Pods-OnlineChatSdk_Tests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		573EDC9601131E4257033DC11AAD6FBA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7AC6161C36FC958B693D919BC395D788 /* Pods-OnlineChatSdk_Tests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-OnlineChatSdk_Tests/Pods-OnlineChatSdk_Tests-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-OnlineChatSdk_Tests/Pods-OnlineChatSdk_Tests.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		823476B22AA8BC6EFC2AF819832857CB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 325DA660D42FA1E563623E4E3CDB13C3 /* Pods-OnlineChatSdk_Example.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-OnlineChatSdk_Example/Pods-OnlineChatSdk_Example-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-OnlineChatSdk_Example/Pods-OnlineChatSdk_Example.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		93EEB9C292410CFA6C60BF0B197418BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 996B4B332409D7E7FA09CC4B2D826C45 /* OnlineChatSdk.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/OnlineChatSdk/OnlineChatSdk-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/OnlineChatSdk/OnlineChatSdk-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/OnlineChatSdk/OnlineChatSdk.modulemap";
+				PRODUCT_MODULE_NAME = OnlineChatSdk;
+				PRODUCT_NAME = OnlineChatSdk;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B0087CB4594321EF41619F3181FE120E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_RELEASE=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Release;
+		};
+		B74FE4E40ECDDF54C134B546547EDB37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 996B4B332409D7E7FA09CC4B2D826C45 /* OnlineChatSdk.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/OnlineChatSdk/OnlineChatSdk-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/OnlineChatSdk/OnlineChatSdk-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/OnlineChatSdk/OnlineChatSdk.modulemap";
+				PRODUCT_MODULE_NAME = OnlineChatSdk;
+				PRODUCT_NAME = OnlineChatSdk;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B8BCBD0110C2658BB5DAADB9B7D97B92 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"POD_CONFIGURATION_DEBUG=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B8BCBD0110C2658BB5DAADB9B7D97B92 /* Debug */,
+				B0087CB4594321EF41619F3181FE120E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63AE78E86BF0DAF3FB86C3FD1524AEE9 /* Build configuration list for PBXNativeTarget "Pods-OnlineChatSdk_Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E3EB4C0FA6A152C3AD6101B29C005C0 /* Debug */,
+				573EDC9601131E4257033DC11AAD6FBA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B37F102035B11F4BCF075DE27116005F /* Build configuration list for PBXNativeTarget "Pods-OnlineChatSdk_Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				823476B22AA8BC6EFC2AF819832857CB /* Debug */,
+				04EE59200408CF5B718B08EFEB157EC2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EEE00C25AF5BC68482C05792FE077251 /* Build configuration list for PBXNativeTarget "OnlineChatSdk" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B74FE4E40ECDDF54C134B546547EDB37 /* Debug */,
+				93EEB9C292410CFA6C60BF0B197418BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+}
