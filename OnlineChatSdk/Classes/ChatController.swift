@@ -47,6 +47,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         self.chatView = WKWebView(frame: (self.parent?.view.bounds)!, configuration: config)
         self.chatView.navigationDelegate = self
         self.view = self.chatView
+
     }
     
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
