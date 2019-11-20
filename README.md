@@ -1,7 +1,7 @@
 # OnlineChatSdk-Swift
 [![Version](https://img.shields.io/cocoapods/v/OnlineChatSdk.svg?style=flat)](https://cocoapods.org/pods/OnlineChatSdk)
 [![License](https://img.shields.io/cocoapods/l/OnlineChatSdk.svg?style=flat)](https://cocoapods.org/pods/OnlineChatSdk)
-[![Platform](https://img.shields.io/cocoapods/p/OnlineChatSdk.svg?style=flat)](https://cocoapods.org/pods/OnlineChatSdk)
+![Platform](https://img.shields.io/cocoapods/p/SwiftMessages.svg?style=flat)
 
 ## Добавление в проект
 
