@@ -2,15 +2,15 @@ PODS:
   - OnlineChatSdk (0.0.1)
 
 DEPENDENCIES:
-  - OnlineChatSdk (from `../`)
+  - OnlineChatSdk
 
-EXTERNAL SOURCES:
-  OnlineChatSdk:
-    :path: "../"
+SPEC REPOS:
+  trunk:
+    - OnlineChatSdk
 
 SPEC CHECKSUMS:
-  OnlineChatSdk: 53b5282799179bee91b268afd8f70aa17e14f0c3
+  OnlineChatSdk: fdc87678fced5df5f4ad3f4304d3eec4de6dad4c
 
-PODFILE CHECKSUM: a6397bf95fd98ccfab272ed4cd7523c15ca4cd1f
+PODFILE CHECKSUM: adee2f574d16e8ed8f504f977cf28d2797543903
 
 COCOAPODS: 1.8.4
