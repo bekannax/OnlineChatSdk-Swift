@@ -4,8 +4,9 @@
 ![Platform](https://img.shields.io/cocoapods/p/SwiftMessages.svg?style=flat)
 
 ## Добавление в проект
-
+```ruby
 pod 'OnlineChatSdk'
+```
 
 ## Получение id
 Перейдите в раздел «Настройки - Установка» и скопируйте значение переменной id.
