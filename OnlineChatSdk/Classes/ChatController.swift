@@ -43,7 +43,9 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
         config.preferences = preferences
-        
+
+
+
         self.chatView = WKWebView(frame: (self.parent?.view.bounds)!, configuration: config)
         self.chatView.navigationDelegate = self
         self.view = self.chatView
