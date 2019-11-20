@@ -20,6 +20,7 @@ Pod::Spec.new do |s|
 
   s.description      = <<-DESC
 TODO: Add long description of the pod here.
+A small library containing a wrapper for the WKWebView.
                        DESC
 
   s.homepage         = 'https://github.com/bekannax/OnlineChatSdk-Swift'
