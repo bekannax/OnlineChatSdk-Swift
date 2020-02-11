@@ -18,7 +18,7 @@ class DemoController: ChatController {
         }
         
         override func onClientId(_ clientId: String) {
-            
+
         }
 
         override func onSendRate(_ data: NSDictionary) {

@@ -1,5 +1,5 @@
 PODS:
-  - OnlineChatSdk (0.0.1)
+  - OnlineChatSdk (0.0.2)
 
 DEPENDENCIES:
   - OnlineChatSdk
@@ -9,7 +9,7 @@ SPEC REPOS:
     - OnlineChatSdk
 
 SPEC CHECKSUMS:
-  OnlineChatSdk: fdc87678fced5df5f4ad3f4304d3eec4de6dad4c
+  OnlineChatSdk: 421b17a804f22c193f81f02a891e7d91128c525b
 
 PODFILE CHECKSUM: adee2f574d16e8ed8f504f977cf28d2797543903
 

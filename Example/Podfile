@@ -1,7 +1,8 @@
 use_frameworks!
 
 target 'OnlineChatSdk_Example' do
-  pod 'OnlineChatSdk', :path => '../'
+  pod 'OnlineChatSdk'
+#  pod 'OnlineChatSdk', :path => '../'
 
   target 'OnlineChatSdk_Tests' do
     inherit! :search_paths
