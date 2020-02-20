@@ -97,7 +97,7 @@ override func onEvent(_ name: String, _ data: NSDictionary) {
  * **getContacts** - получение контактных данных.
 
 ```swift
-callJsSetClientInfo("{name: \"Имя\", email: \"test@mail.ru\"")
+callJsSetClientInfo("{name: \"Имя\", email: \"test@mail.ru\"}")
 
 callJsSetTarget("reason")
 
