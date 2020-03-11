@@ -11,6 +11,8 @@ import WebKit
 import AVFoundation
 
 open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
+
+    public static let version = "0.0.4";
     
     public static let event_operatorSendMessage = "operatorSendMessage";
     public static let event_clientSendMessage = "clientSendMessage";
@@ -53,16 +55,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         self.view = self.chatView
     }
     
-    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        self.didFinish = true
-        if self.callJs != nil && !self.callJs.isEmpty {
-            for script in self.callJs {
-                callJs(script)
-            }
-            self.callJs = nil
-        }
-    }
-    
     private func getCallJsMethod(_ name: String, params: Array<Any>) -> String {
         var res: String = "window.MeTalk('"
         res.append(name)
@@ -100,7 +92,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return "{}"
     }
     
-    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "") {
+    public func load(_ id: String, _ domain: String, language: String = "", clientId: String = "") {
         var setup: Dictionary<String, Any> = [:]
         if !language.isEmpty {
             setup["language"] = language
@@ -135,7 +127,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
     
     public func callJsSetClientInfo(_ jsonInfo: String) {
-        callJsMethod(ChatController.method_setClientInfo, params: [jsonInfo])
+        callJsMethod(ChatController.method_setClientInfo, params: [Command(jsonInfo)])
     }
     
     public func callJsSetTarget(_ reason: String) {
@@ -170,13 +162,11 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         if message.name != "chatInterface" {
             return
         }
-
         let jsonBody = (message.body as! String).data(using: .utf8)!
         let body = try? (JSONSerialization.jsonObject(with: jsonBody, options: .mutableLeaves) as! NSDictionary)
         if body == nil {
             return
         }
-        
         if body!["name"] == nil {
             return
         }
@@ -186,6 +176,17 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         } else {
             data = [:]
         }
+
+        if (!self.didFinish) {
+            if self.callJs != nil && !self.callJs.isEmpty {
+                for script in self.callJs {
+                    callJs(script)
+                }
+                self.callJs = nil
+            }
+            self.didFinish = true
+        }
+
         let name = body!["name"] as! String
         switch name {
             case ChatController.event_clientId:
