@@ -45,8 +45,11 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         config.preferences = preferences
 
 
-
-        self.chatView = WKWebView(frame: (self.parent?.view.bounds)!, configuration: config)
+        var frame = UIScreen.main.bounds
+        if self.parent != nil && self.parent?.view != nil && self.parent?.view.bounds != nil {
+            frame = (self.parent?.view.bounds)!
+        }
+        self.chatView = WKWebView(frame: frame, configuration: config)
         self.chatView.navigationDelegate = self
         self.view = self.chatView
 
@@ -108,6 +111,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             setup["clientId"] = clientId
         }
         let surl = "https://admin.verbox.ru/support/chat/\(id)/\(domain)"
+//        print("tetttt : \(surl)")
         var url = URL(string: surl)
         if !setup.isEmpty {
             var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
