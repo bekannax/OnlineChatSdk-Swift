@@ -1,6 +1,0 @@
-framework module Pods_OnlineChatSdk_Example {
-  umbrella header "Pods-OnlineChatSdk_Example-umbrella.h"
-
-  export *
-  module * { export * }
-}
