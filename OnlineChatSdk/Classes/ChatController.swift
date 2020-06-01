@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 import AVFoundation
 
-open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler{
+open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
     
     public static let event_operatorSendMessage = "operatorSendMessage";
     public static let event_clientSendMessage = "clientSendMessage";
@@ -31,6 +31,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     public var chatView: WKWebView!
     private var callJs: Array<String>!
     private var didFinish: Bool = false
+    private var widgetUrl: String = ""
         
     override public func loadView() {
         let contentController = WKUserContentController()
@@ -64,7 +65,18 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             self.callJs = nil
         }
     }
-    
+
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> ()) {
+        if let host = navigationAction.request.url?.host {
+            if navigationAction.request.url?.absoluteString == self.widgetUrl {
+                decisionHandler(.allow)
+                return
+            }
+        }
+        UIApplication.shared.openURL(navigationAction.request.url!)
+        decisionHandler(.cancel)
+    }
+
     private func getCallJsMethod(_ name: String, params: Array<Any>) -> String {
         var res: String = "window.MeTalk('"
         res.append(name)
@@ -110,16 +122,15 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         if !clientId.isEmpty {
             setup["clientId"] = clientId
         }
-        let surl = "https://admin.verbox.ru/support/chat/\(id)/\(domain)"
-//        print("tetttt : \(surl)")
-        var url = URL(string: surl)
+        self.widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(domain)"
+        var url = URL(string: self.widgetUrl)
         if !setup.isEmpty {
             var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
             urlComponents?.queryItems = [URLQueryItem(name: "setup", value: toJson(setup as AnyObject))]
             url = urlComponents!.url!
         }
         if url == nil {
-            url = URL(string: surl)
+            url = URL(string: self.widgetUrl)
         }
 
         self.chatView.load(URLRequest(url: url!))
@@ -138,7 +149,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
     
     public func callJsSetClientInfo(_ jsonInfo: String) {
-        callJsMethod(ChatController.method_setClientInfo, params: [jsonInfo])
+        callJsMethod(ChatController.method_setClientInfo, params: [Command(jsonInfo)])
     }
     
     public func callJsSetTarget(_ reason: String) {
