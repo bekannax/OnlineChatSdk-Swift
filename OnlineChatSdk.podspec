@@ -1,4 +1,4 @@
-Pod::Spec.new do |spec|
+Pod::Spec.new do |s|
   s.name             = 'OnlineChatSdk'
   s.version          = '0.0.2'
   s.summary          = 'A small library containing a wrapper for the WKWebView.'

@@ -67,7 +67,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
 
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> ()) {
-        if let host = navigationAction.request.url?.host {
+        if let _ = navigationAction.request.url?.host {
             if navigationAction.request.url?.absoluteString == self.widgetUrl {
                 decisionHandler(.allow)
                 return
