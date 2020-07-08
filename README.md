@@ -126,7 +126,7 @@ override func getContactsCallback(_ data: NSDictionary) {
 **getNewMessages** - получение новых сообщений от оператора.
 
 ```swift
-ChatApi.getNewMessages("<TOKEN>", "<clientId>")
+ChatApi.getNewMessages("<TOKEN>", "<clientId>", callback:
     {(result) in
         if result?["error"] != nil {
             print("error : \(String(describing: result?["error"]))")
@@ -134,6 +134,7 @@ ChatApi.getNewMessages("<TOKEN>", "<clientId>")
             print("result : \(result.debugDescription)")
         }
     }
+)
 ```
 Подробное описание можно прочесть в разделе «Интеграция и API - REST API - Инструкции по подключению».
 
