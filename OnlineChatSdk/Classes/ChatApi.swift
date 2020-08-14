@@ -36,7 +36,8 @@ open class ChatApi {
     public func messages(_ token: String, params: Dictionary<String, Any>, callback: @escaping (NSDictionary?) -> Void) {
         send(token, "message", params, callback: callback)
     }
-    
+
+
     public static func getNewMessages(_ token: String, _ clientId: String, callback: @escaping (NSDictionary?) -> Void) {
         let dtFormatter = DateFormatter()
         dtFormatter.calendar = Calendar(identifier: Calendar.Identifier.iso8601)
