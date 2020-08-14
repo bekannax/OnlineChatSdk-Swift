@@ -73,8 +73,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 return
             }
         }
-        UIApplication.shared.openURL(navigationAction.request.url!)
         decisionHandler(.cancel)
+        self.onLinkPressed(url: navigationAction.request.url!)
     }
 
     private func getCallJsMethod(_ name: String, params: Array<Any>) -> String {
@@ -227,6 +227,10 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 break
         }
         onEvent(name, data!)
+    }
+
+    open func onLinkPressed(url: URL) {
+        UIApplication.shared.openURL(url)
     }
     
     open func playSound(_ systemSoundId: SystemSoundID) {
