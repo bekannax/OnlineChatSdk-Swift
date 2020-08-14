@@ -241,7 +241,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     open func onClientId(_ clientId: String) {
         
     }
-    
+
+
     open func onSendRate(_ data: NSDictionary) {
         
     }
