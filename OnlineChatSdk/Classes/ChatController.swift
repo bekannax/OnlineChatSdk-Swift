@@ -229,6 +229,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         onEvent(name, data!)
     }
 
+
     open func onLinkPressed(url: URL) {
         UIApplication.shared.openURL(url)
     }
