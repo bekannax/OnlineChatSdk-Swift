@@ -32,6 +32,14 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private var callJs: Array<String>!
     private var didFinish: Bool = false
     private var widgetUrl: String = ""
+
+    public static func getUnreadedMessages() {
+
+    }
+
+    public static func getNewMessages() {
+
+    }
         
     override public func loadView() {
         let contentController = WKUserContentController()
@@ -114,7 +122,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return "{}"
     }
     
-    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "") {
+    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "") {
         var setup: Dictionary<String, Any> = [:]
         if !language.isEmpty {
             setup["language"] = language
