@@ -68,6 +68,9 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 "stop": dtFormat.string(from: currentDate)
             ]
         ] as [String: Any], callback: {(result) in
+
+            ChatApiMessagesWrapper(result as! Dictionary<String, Any>)
+
             callback([
                 "success": false,
                 "error": [
