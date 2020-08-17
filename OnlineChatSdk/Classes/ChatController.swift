@@ -33,14 +33,59 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private var didFinish: Bool = false
     private var widgetUrl: String = ""
 
-    public static func getUnreadedMessages() {
+    private static func getUnreadedMessages(_ startDate: String, callback: @escaping (NSDictionary?) -> Void) {
+        let token = ChatConfig.getApiToken()
+        if token == "" {
+            callback([
+                "success": false,
+                "error": [
+                    "code": 0,
+                    "descr": "Не задан token"
+                ]
+            ])
+        }
+        let clientId = ChatConfig.getClientId()
+        if clientId == "" {
+            callback([
+                "success": false,
+                "error": [
+                    "code": 0,
+                    "descr": "Не задан clientId"
+                ]
+            ])
+        }
+        let dtFormat = ChatDateFormatter()
+        let currentDate = NSDate() as Date
+
+        ChatApi().messages(token, params: [
+            "client": [
+                "clientId": clientId
+            ],
+            "sender": "operator",
+            "status": "unreaded",
+            "dateRange": [
+                "start": startDate,
+                "stop": dtFormat.string(from: currentDate)
+            ]
+        ] as [String: Any], callback: {(result) in
+            callback([
+                "success": false,
+                "error": [
+                    "code": 0,
+                    "descr": "Не реализовано"
+                ]
+            ])
+        })
+    }
+
+    public static func getUnreadedMessages(callback: @escaping (NSDictionary?) -> Void) {
 
     }
 
-    public static func getNewMessages() {
+    public static func getNewMessages(callback: @escaping (NSDictionary?) -> Void) {
 
     }
-        
+
     override public func loadView() {
         let contentController = WKUserContentController()
         contentController.add(self, name: "chatInterface")
@@ -123,6 +168,10 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
     
     public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "") {
+        if apiToken != "" {
+            ChatConfig.setApiToken(apiToken)
+        }
+
         var setup: Dictionary<String, Any> = [:]
         if !language.isEmpty {
             setup["language"] = language
@@ -211,7 +260,9 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         let name = body!["name"] as! String
         switch name {
             case ChatController.event_clientId:
-                onClientId(data!["clientId"] != nil ? data!["clientId"] as! String : "")
+                let clientId = data!["clientId"] != nil ? data!["clientId"] as! String : ""
+                ChatConfig.setClientId(clientId)
+                onClientId(clientId)
                 break
             case ChatController.event_sendRate:
                 onSendRate(data!)
@@ -249,7 +300,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     open func onClientId(_ clientId: String) {
         
     }
-
 
     open func onSendRate(_ data: NSDictionary) {
         
