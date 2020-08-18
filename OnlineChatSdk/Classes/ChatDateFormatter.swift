@@ -1,6 +1,7 @@
 import Foundation
 
 class ChatDateFormatter : DateFormatter {
+
     override init() {
         super.init()
         self.calendar = Calendar(identifier: Calendar.Identifier.iso8601)
@@ -11,5 +12,9 @@ class ChatDateFormatter : DateFormatter {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    public func getCurrent() -> String {
+        self.string(from: NSDate() as Date)
     }
 }

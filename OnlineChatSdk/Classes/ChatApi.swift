@@ -10,10 +10,11 @@ import Foundation
 
 open class ChatApi {
     
-    private func post(_ url: String, _ params: Dictionary<String, Any>, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+    private func post(_ url: String, _ token: String,  _ params: Dictionary<String, Any>, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
         guard let url = URL(string: url) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
+        request.addValue(token, forHTTPHeaderField: "X-Token")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         guard let httpBody = try? JSONSerialization.data(withJSONObject: params, options: []) else { return }
         request.httpBody = httpBody
@@ -23,8 +24,8 @@ open class ChatApi {
     }
     
     public func send(_ token: String, _ method: String, _ params: Dictionary<String, Any>, callback: @escaping (NSDictionary?) -> Void) {
-        let url = "https://admin.verbox.ru/api/chat/\(token)/\(method)"
-        post(url, params) { (data, response, error) in
+        let url = "https://admin.verbox.ru/json/v1.0/\(method)"
+        post(url, token, params) { (data, response, error) in
             guard let data = data else { return }
             do {
                 let json = try JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary
@@ -34,9 +35,8 @@ open class ChatApi {
     }
     
     public func messages(_ token: String, params: Dictionary<String, Any>, callback: @escaping (NSDictionary?) -> Void) {
-        send(token, "message", params, callback: callback)
+        send(token, "chat/message/getList", params, callback: callback)
     }
-
 
     public static func getNewMessages(_ token: String, _ clientId: String, callback: @escaping (NSDictionary?) -> Void) {
         let dtFormatter = DateFormatter()

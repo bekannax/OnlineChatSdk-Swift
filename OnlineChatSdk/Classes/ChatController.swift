@@ -33,6 +33,26 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private var didFinish: Bool = false
     private var widgetUrl: String = ""
 
+    private static func getUnreadedMessagesCallback(_ result: NSDictionary) -> NSDictionary {
+        let resultWrapper = ChatApiMessagesWrapper(result)
+        if resultWrapper.getMessages().count == 0 {
+            return resultWrapper.getResult()
+        }
+        var unreadedMessages: Array<NSDictionary> = []
+        for message: NSDictionary in resultWrapper.getMessages() as! Array<NSDictionary> {
+            if message.value(forKey: "isVisibleForClient") != nil {
+                if (message.value(forKey: "isVisibleForClient") as! Int) == 1 {
+                    unreadedMessages.append(message)
+                }
+            }
+        }
+        if unreadedMessages.count == 0 {
+            return resultWrapper.getResult()
+        }
+        resultWrapper.setMessages(unreadedMessages as NSArray)
+        return resultWrapper.getResult()
+    }
+
     private static func getUnreadedMessages(_ startDate: String, callback: @escaping (NSDictionary?) -> Void) {
         let token = ChatConfig.getApiToken()
         if token == "" {
@@ -54,9 +74,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 ]
             ])
         }
-        let dtFormat = ChatDateFormatter()
-        let currentDate = NSDate() as Date
-
         ChatApi().messages(token, params: [
             "client": [
                 "clientId": clientId
@@ -65,28 +82,41 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             "status": "unreaded",
             "dateRange": [
                 "start": startDate,
-                "stop": dtFormat.string(from: currentDate)
+                "stop": ChatDateFormatter().getCurrent()
             ]
         ] as [String: Any], callback: {(result) in
-
-            ChatApiMessagesWrapper(result as! Dictionary<String, Any>)
-
-            callback([
-                "success": false,
-                "error": [
-                    "code": 0,
-                    "descr": "Не реализовано"
-                ]
-            ])
+            callback( ChatController.getUnreadedMessagesCallback(result!) )
         })
     }
 
     public static func getUnreadedMessages(callback: @escaping (NSDictionary?) -> Void) {
+        let startDate = ChatDateFormatter().string(from: Date(timeIntervalSince1970: TimeInterval(Int(NSDate().timeIntervalSince1970) - 86400 * 14)))
+        ChatController.getUnreadedMessages(startDate, callback: callback)
+    }
 
+    private static func getNewMessagesCallback(_ result: NSDictionary) -> NSDictionary {
+        let resultWrapper = ChatApiMessagesWrapper(result)
+        if resultWrapper.getMessages().count == 0 {
+            return resultWrapper.getResult()
+        }
+        let lastMessage = resultWrapper.getMessages()[resultWrapper.getMessages().count - 1] as! NSDictionary
+        let lastDate = ChatDateFormatter().date(from: lastMessage["dateTime"] as! String)
+        let nextDate = Date(timeIntervalSince1970: TimeInterval( Int(lastDate!.timeIntervalSince1970) + 1 ))
+        ChatConfig.setLastDateTimeNewMessage( ChatDateFormatter().string(from: nextDate) )
+        return resultWrapper.getResult()
     }
 
     public static func getNewMessages(callback: @escaping (NSDictionary?) -> Void) {
-
+        let startDate = ChatConfig.getLastDateTimeNewMessage()
+        if startDate == "" {
+            self.getUnreadedMessages(callback: {(result) in
+                callback( ChatController.getNewMessagesCallback(result!) )
+            })
+        } else {
+            self.getUnreadedMessages(startDate, callback: {(result) in
+                callback( ChatController.getNewMessagesCallback(result!) )
+            })
+        }
     }
 
     override public func loadView() {

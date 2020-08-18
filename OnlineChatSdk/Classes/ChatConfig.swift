@@ -56,6 +56,6 @@ class ChatConfig {
     }
 
     private func getConfigString(_ key: String) -> String {
-        self.config.value(forKey: key) as! String
+        self.config.value(forKey: key) != nil ? self.config.value(forKey: key) as! String : ""
     }
 }
