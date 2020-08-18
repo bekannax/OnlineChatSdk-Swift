@@ -11,11 +11,11 @@ pod 'OnlineChatSdk'
 ```
 
 ## Получение id
-Перейдите в раздел «Настройки - Установка» и скопируйте значение переменной id.
-![](https://github.com/bekannax/OnlineChatSdk-Android/blob/master/images/2019-03-21_16-53-28.png)
+Перейдите в раздел «Online чат - Ваш сайт - Настройки - Установка» и скопируйте значение переменной id.
+![](https://github.com/bekannax/OnlineChatSdk-Android/blob/master/images/2019-03-21_16-53-28.png?raw=true)
 
 ## Пример использования
-Добавьте свой **ViewController** с суперклассом `ChatController`. 
+Добавьте свой `ViewController` с суперклассом `ChatController`. 
 ```swift
 class MyController: ChatController {
     
@@ -126,7 +126,11 @@ override func getContactsCallback(_ data: NSDictionary) {
 ![](https://github.com/bekannax/OnlineChatSdk-Android/blob/master/images/2019-04-01_18-32-22.png?raw=true)
 
 ## Получение новых сообщений от оператора
-Для получения новых сообщений, в `ChatController` есть два статичных метода **getUnreadedMessages** и **getNewMessages**.
+Для получения новых сообщений, в `ChatController` есть два статичных метода `getUnreadedMessages` и `getNewMessages`.
+
+**getUnreadedMessages** - возвращает все непрочитанные сообщения от оператора.
+
+**getNewMessages** так же возвращает непрочитанные сообщения, но при следующих запросах предыдущие сообщения уже не возвращаются. 
 
 Перед использование методов, нужно указать `apiToken`.
 
