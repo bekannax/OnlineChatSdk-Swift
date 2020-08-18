@@ -128,7 +128,7 @@ override func getContactsCallback(_ data: NSDictionary) {
 ## Получение новых сообщений от оператора
 Для получения новых сообщений, в `ChatController` есть два статичных метода `getUnreadedMessages` и `getNewMessages`.
 
-**getUnreadedMessages** - возвращает все непрочитанные сообщения от оператора.
+**getUnreadedMessages** - возвращает все непрочитанные сообщения.
 
 **getNewMessages** так же возвращает непрочитанные сообщения, но при следующих запросах предыдущие сообщения уже не возвращаются. 
 
