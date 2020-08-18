@@ -199,6 +199,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         }
         return "{}"
     }
+
     
     public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "") {
         if apiToken != "" {
