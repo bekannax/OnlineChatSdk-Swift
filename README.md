@@ -3,6 +3,8 @@
 [![License](https://img.shields.io/cocoapods/l/OnlineChatSdk.svg?style=flat)](https://cocoapods.org/pods/OnlineChatSdk)
 ![Platform](https://img.shields.io/cocoapods/p/SwiftMessages.svg?style=flat)
 
+![](https://github.com/bekannax/OnlineChatSdk-Swift/blob/master/images/2020-08-18_17-43-31.png?raw=true)
+
 ## Добавление в проект
 ```ruby
 pod 'OnlineChatSdk'
@@ -23,9 +25,9 @@ class MyController: ChatController {
     }
 }
 ```
-Так же при загрузке можно указать **language** и **clientId**.
+Так же при загрузке можно указать `language`, `clientId` и `apiToken`.
 ```swift
-load("<Ваш id>", "<Домен вашего сайта>", "en", "newClientId")
+load("<Ваш id>", "<Домен вашего сайта>", "en", "newClientId", "<Токен для доступа к Rest Api>")
 ```
 
 ## События
@@ -120,23 +122,23 @@ override func getContactsCallback(_ data: NSDictionary) {
 
 ## Получение token
 Перейдите в раздел «Интеграция и API - REST API», скопируйте существующий token или добавьте новый.
-![](https://github.com/bekannax/OnlineChatSdk-Android/blob/master/images/2019-04-01_18-32-22.png)
 
-## ChatApi
-**getNewMessages** - получение новых сообщений от оператора.
+![](https://github.com/bekannax/OnlineChatSdk-Android/blob/master/images/2019-04-01_18-32-22.png?raw=true)
+
+## Получение новых сообщений от оператора
+Для получения новых сообщений, в `ChatController` есть два статичных метода **getUnreadedMessages** и **getNewMessages**.
+
+Перед использование методов, нужно указать `apiToken`.
 
 ```swift
-ChatApi.getNewMessages("<TOKEN>", "<clientId>", callback:
-    {(result) in
-        if result?["error"] != nil {
-            print("error : \(String(describing: result?["error"]))")
-        } else {
-            print("result : \(result.debugDescription)")
-        }
-    }
-)
+ChatController.getUnreadedMessages { data in }
+ChatController.getNewMessages { data in }
 ```
+Формат `data` аналогичен ответу метода /chat/message/getList в Rest Api.
+
 Подробное описание можно прочесть в разделе «Интеграция и API - REST API - Инструкции по подключению».
+
+![](https://github.com/bekannax/OnlineChatSdk-Android/blob/master/images/2020-08-14_19-05-48.png?raw=true)
 
 ## License
 
