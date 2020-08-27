@@ -53,8 +53,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return resultWrapper.getResult()
     }
 
-    private static func getUnreadedMessages(_ startDate: String, callback: @escaping (NSDictionary?) -> Void) {
-        let token = ChatConfig.getApiToken()
+    private static func getUnreadedMessages(_ startDate: String, _ clientId: String, _ token: String, callback: @escaping (NSDictionary?) -> Void) {
         if token == "" {
             callback([
                 "success": false,
@@ -64,7 +63,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 ]
             ])
         }
-        let clientId = ChatConfig.getClientId()
         if clientId == "" {
             callback([
                 "success": false,
@@ -89,9 +87,14 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         })
     }
 
+    public static func getUnreadedMessages(clientId: String, token: String, callback: @escaping (NSDictionary?) -> Void) {
+        let startDate = ChatDateFormatter().string(from: Date(timeIntervalSince1970: TimeInterval(Int(NSDate().timeIntervalSince1970) - 86400 * 14)))
+        ChatController.getUnreadedMessages(startDate, clientId, token, callback: callback)
+    }
+
     public static func getUnreadedMessages(callback: @escaping (NSDictionary?) -> Void) {
         let startDate = ChatDateFormatter().string(from: Date(timeIntervalSince1970: TimeInterval(Int(NSDate().timeIntervalSince1970) - 86400 * 14)))
-        ChatController.getUnreadedMessages(startDate, callback: callback)
+        ChatController.getUnreadedMessages(startDate, ChatConfig.getClientId(), ChatConfig.getApiToken(), callback: callback)
     }
 
     private static func getNewMessagesCallback(_ result: NSDictionary) -> NSDictionary {
@@ -106,17 +109,23 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return resultWrapper.getResult()
     }
 
-    public static func getNewMessages(callback: @escaping (NSDictionary?) -> Void) {
+    public static func getNewMessages(clientId: String, token: String, callback: @escaping (NSDictionary?) -> Void) {
         let startDate = ChatConfig.getLastDateTimeNewMessage()
         if startDate == "" {
-            self.getUnreadedMessages(callback: {(result) in
+            self.getUnreadedMessages(clientId: clientId, token: token, callback: {(result) in
                 callback( ChatController.getNewMessagesCallback(result!) )
             })
         } else {
-            self.getUnreadedMessages(startDate, callback: {(result) in
+            self.getUnreadedMessages(startDate, clientId, token, callback: {(result) in
                 callback( ChatController.getNewMessagesCallback(result!) )
             })
         }
+    }
+
+    public static func getNewMessages(callback: @escaping (NSDictionary?) -> Void) {
+        self.getNewMessages(clientId: ChatConfig.getClientId(), token: ChatConfig.getApiToken(), callback: {(result) in
+            callback( ChatController.getNewMessagesCallback(result!) )
+        })
     }
 
     override public func loadView() {
