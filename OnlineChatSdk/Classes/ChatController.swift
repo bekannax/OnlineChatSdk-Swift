@@ -163,7 +163,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
 
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> ()) {
         if let _ = navigationAction.request.url?.host {
-            if navigationAction.request.url?.absoluteString == self.widgetUrl {
+            if (navigationAction.request.url?.absoluteString.contains(self.widgetUrl))! {
                 decisionHandler(.allow)
                 return
             }
@@ -329,7 +329,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         }
         onEvent(name, data!)
     }
-
 
     open func onLinkPressed(url: URL) {
         UIApplication.shared.openURL(url)
