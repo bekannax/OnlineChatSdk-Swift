@@ -172,6 +172,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         self.onLinkPressed(url: navigationAction.request.url!)
     }
 
+
     private func getCallJsMethod(_ name: String, params: Array<Any>) -> String {
         var res: String = "window.MeTalk('"
         res.append(name)
