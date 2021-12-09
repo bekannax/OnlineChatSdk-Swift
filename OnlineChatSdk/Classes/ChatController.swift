@@ -18,6 +18,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     public static let event_contactsUpdated = "contactsUpdated";
     public static let event_sendRate = "sendRate";
     public static let event_clientId = "clientId";
+    public static let event_closeSupport = "closeSupport";
     
     public static let method_setClientInfo = "setClientInfo";
     public static let method_setTarget = "setTarget";
@@ -142,22 +143,32 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
 
 
         var frame = UIScreen.main.bounds
-        if self.parent != nil && self.parent?.view != nil && self.parent?.view.bounds != nil {
-            frame = (self.parent?.view.bounds)!
+        if parent != nil && parent?.view != nil && parent?.view.bounds != nil {
+            frame = (parent?.view.bounds)!
         }
-        self.chatView = WKWebView(frame: frame, configuration: config)
-        self.chatView.navigationDelegate = self
-        self.view = self.chatView
+        chatView = WKWebView(frame: frame, configuration: config)
+        chatView.navigationDelegate = self
+        view = chatView
 
     }
     
+    override public func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    override public func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        self.didFinish = true
-        if self.callJs != nil && !self.callJs.isEmpty {
-            for script in self.callJs {
+        didFinish = true
+        if callJs != nil && !callJs.isEmpty {
+            for script in callJs {
                 callJs(script)
             }
-            self.callJs = nil
+            callJs = nil
         }
     }
 
@@ -169,10 +180,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             }
         }
         decisionHandler(.cancel)
-        self.onLinkPressed(url: navigationAction.request.url!)
+        onLinkPressed(url: navigationAction.request.url!)
     }
-
-
 
     private func getCallJsMethod(_ name: String, params: Array<Any>) -> String {
         var res: String = "window.MeTalk('"
@@ -197,7 +206,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
     
     private func callJs(_ script: String) {
-        self.chatView.evaluateJavaScript(script)
+        chatView.evaluateJavaScript(script)
     }
     
     private func toJson(_ jsonObj: AnyObject) -> String {
@@ -223,29 +232,36 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         if !clientId.isEmpty {
             setup["clientId"] = clientId
         }
-        self.widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(domain)"
-        var url = URL(string: self.widgetUrl)
+        widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(domain)"
+        var url = URL(string: widgetUrl)
+        var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
         if !setup.isEmpty {
-            var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
-            urlComponents?.queryItems = [URLQueryItem(name: "setup", value: toJson(setup as AnyObject))]
-            url = urlComponents!.url!
+            urlComponents?.queryItems = [
+                URLQueryItem(name: "setup", value: toJson(setup as AnyObject)),
+                URLQueryItem(name: "sdk-show-close-button", value: "1")
+            ]
+        } else {
+            urlComponents?.queryItems = [
+                URLQueryItem(name: "sdk-show-close-button", value: "1")
+            ]
         }
+        url = urlComponents!.url!
         if url == nil {
-            url = URL(string: self.widgetUrl)
+            url = URL(string: widgetUrl)
         }
 
-        self.chatView.load(URLRequest(url: url!))
-        self.chatView.allowsBackForwardNavigationGestures = true
+        chatView.load(URLRequest(url: url!))
+        chatView.allowsBackForwardNavigationGestures = true
     }
     
     public func callJsMethod(_ name: String, params: Array<Any>) {
-        if self.didFinish {
+        if didFinish {
             callJs(getCallJsMethod(name, params: params))
         } else {
-            if self.callJs == nil {
-                self.callJs = []
+            if callJs == nil {
+                callJs = []
             }
-            self.callJs.append(getCallJsMethod(name, params: params))
+            callJs.append(getCallJsMethod(name, params: params))
         }
     }
     
@@ -303,6 +319,9 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         }
         let name = body!["name"] as! String
         switch name {
+            case ChatController.event_closeSupport:
+                onCloseSupport()
+                break
             case ChatController.event_clientId:
                 let clientId = data!["clientId"] != nil ? data!["clientId"] as! String : ""
                 ChatConfig.setClientId(clientId)
@@ -330,6 +349,11 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 break
         }
         onEvent(name, data!)
+    }
+
+    open func onCloseSupport() {
+        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
 
     open func onLinkPressed(url: URL) {
@@ -361,7 +385,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
     
     open func onOperatorSendMessage(_ data: NSDictionary) {
-        self.playSound(1315)
+        playSound(1315)
     }
     
     open func onEvent(_ name: String, _ data: NSDictionary) {
