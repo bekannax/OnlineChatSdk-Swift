@@ -11,23 +11,24 @@ import WebKit
 import AVFoundation
 
 open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
+
+    public static let event_operatorSendMessage = "operatorSendMessage"
+    public static let event_clientSendMessage = "clientSendMessage"
+    public static let event_clientMakeSubscribe = "clientMakeSubscribe"
+    public static let event_contactsUpdated = "contactsUpdated"
+    public static let event_sendRate = "sendRate"
+    public static let event_clientId = "clientId"
+    public static let event_closeSupport = "closeSupport"
     
-    public static let event_operatorSendMessage = "operatorSendMessage";
-    public static let event_clientSendMessage = "clientSendMessage";
-    public static let event_clientMakeSubscribe = "clientMakeSubscribe";
-    public static let event_contactsUpdated = "contactsUpdated";
-    public static let event_sendRate = "sendRate";
-    public static let event_clientId = "clientId";
-    public static let event_closeSupport = "closeSupport";
-    
-    public static let method_setClientInfo = "setClientInfo";
-    public static let method_setTarget = "setTarget";
-    public static let method_openReviewsTab = "openReviewsTab";
-    public static let method_openTab = "openTab";
-    public static let method_sendMessage = "sendMessage";
-    public static let method_receiveMessage = "receiveMessage";
-    public static let method_setOperator = "setOperator";
-    public static let method_getContacts = "getContacts";
+    public static let method_setClientInfo = "setClientInfo"
+    public static let method_setTarget = "setTarget"
+    public static let method_openReviewsTab = "openReviewsTab"
+    public static let method_openTab = "openTab"
+    public static let method_sendMessage = "sendMessage"
+    public static let method_receiveMessage = "receiveMessage"
+    public static let method_setOperator = "setOperator"
+    public static let method_getContacts = "getContacts"
+    private static let method_destroy = "destroy"
     
     public var chatView: WKWebView!
     private var callJs: Array<String>!
@@ -141,7 +142,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         config.userContentController = contentController
         config.preferences = preferences
 
-
         var frame = UIScreen.main.bounds
         if parent != nil && parent?.view != nil && parent?.view.bounds != nil {
             frame = (parent?.view.bounds)!
@@ -149,19 +149,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         chatView = WKWebView(frame: frame, configuration: config)
         chatView.navigationDelegate = self
         view = chatView
-
-    }
-    
-    override public func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
 
-    override public func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-    
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         didFinish = true
         if callJs != nil && !callJs.isEmpty {
@@ -220,7 +209,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return "{}"
     }
     
-    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "") {
+    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = false) {
         if apiToken != "" {
             ChatConfig.setApiToken(apiToken)
         }
@@ -236,20 +225,27 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         var url = URL(string: widgetUrl)
         var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
         if !setup.isEmpty {
-            urlComponents?.queryItems = [
-                URLQueryItem(name: "setup", value: toJson(setup as AnyObject)),
-                URLQueryItem(name: "sdk-show-close-button", value: "1")
-            ]
+            if (showCloseButton) {
+                urlComponents?.queryItems = [
+                    URLQueryItem(name: "setup", value: toJson(setup as AnyObject)),
+                    URLQueryItem(name: "sdk-show-close-button", value: "1")
+                ]
+            } else {
+                urlComponents?.queryItems = [
+                    URLQueryItem(name: "setup", value: toJson(setup as AnyObject))
+                ]
+            }
         } else {
-            urlComponents?.queryItems = [
-                URLQueryItem(name: "sdk-show-close-button", value: "1")
-            ]
+            if (showCloseButton) {
+                urlComponents?.queryItems = [
+                    URLQueryItem(name: "sdk-show-close-button", value: "1")
+                ]
+            }
         }
         url = urlComponents!.url!
         if url == nil {
             url = URL(string: widgetUrl)
         }
-
         chatView.load(URLRequest(url: url!))
         chatView.allowsBackForwardNavigationGestures = true
     }
@@ -296,19 +292,24 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     public func callJsGetContacts() {
         callJsMethod(ChatController.method_getContacts, params: [Command("window.getContactsCallback")])
     }
+
+    private func callJsDestroy() {
+        callJsMethod(ChatController.method_destroy, params: [])
+    }
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name != "chatInterface" {
             return
         }
-
         let jsonBody = (message.body as! String).data(using: .utf8)!
         let body = try? (JSONSerialization.jsonObject(with: jsonBody, options: .mutableLeaves) as! NSDictionary)
         if body == nil {
             return
         }
-        
         if body!["name"] == nil {
+            return
+        }
+        if chatView == nil {
             return
         }
         var data: NSDictionary?
@@ -350,10 +351,20 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         }
         onEvent(name, data!)
     }
-
+    
     open func onCloseSupport() {
-        navigationController?.popViewController(animated: true)
+        if chatView == nil {
+            return
+        }
         dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
+    }
+
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        chatView.stopLoading()
+        callJsDestroy()
+        chatView = nil
     }
 
     open func onLinkPressed(url: URL) {
