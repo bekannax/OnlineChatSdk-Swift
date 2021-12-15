@@ -27,7 +27,14 @@ class MyController: ChatController {
 ```
 Так же при загрузке можно указать `language`, `clientId` и `apiToken`.
 ```swift
-load("<Ваш id>", "<Домен вашего сайта>", "en", "newClientId", "<Токен для доступа к Rest Api>", "showCloseButton")
+load(
+    "<Ваш id>", 
+    "<Домен вашего сайта>",
+    "en",
+    "newClientId",
+    "<Токен для доступа к Rest Api>",
+    "showCloseButton"
+)
 ```
 
 ## События
