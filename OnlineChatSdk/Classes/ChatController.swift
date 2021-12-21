@@ -209,7 +209,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return "{}"
     }
     
-    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = false) {
+    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true) {
         if apiToken != "" {
             ChatConfig.setApiToken(apiToken)
         }
@@ -360,11 +360,15 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         navigationController?.popViewController(animated: true)
     }
 
+//    webview
+
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        chatView.stopLoading()
-        callJsDestroy()
-        chatView = nil
+        if animated && chatView != nil {
+            chatView.stopLoading()
+            callJsDestroy()
+            chatView = nil
+        }
     }
 
     open func onLinkPressed(url: URL) {
