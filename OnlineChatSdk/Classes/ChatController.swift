@@ -362,6 +362,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
 
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+
         if animated && chatView != nil {
             chatView.stopLoading()
             callJsDestroy()
