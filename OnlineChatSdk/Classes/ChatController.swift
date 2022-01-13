@@ -360,8 +360,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         navigationController?.popViewController(animated: true)
     }
 
-//    webview
-
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if animated && chatView != nil {
