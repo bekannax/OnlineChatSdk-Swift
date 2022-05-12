@@ -213,7 +213,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         if apiToken != "" {
             ChatConfig.setApiToken(apiToken)
         }
-
         var setup: Dictionary<String, Any> = [:]
         if !language.isEmpty {
             setup["language"] = language
@@ -223,6 +222,13 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         }
         widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(domain)"
         var url = URL(string: widgetUrl)
+        if url == nil {
+            var encodeDomain = String(describing: domain.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
+            encodeDomain = encodeDomain.replacingOccurrences(of: "Optional(\"", with: "")
+            encodeDomain = encodeDomain.replacingOccurrences(of: "\")", with: "")
+            widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(encodeDomain)"
+            url = URL(string: widgetUrl)
+        }
         var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
         if !setup.isEmpty {
             if (showCloseButton) {
