@@ -29,11 +29,13 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     public static let method_setOperator = "setOperator"
     public static let method_getContacts = "getContacts"
     private static let method_destroy = "destroy"
+    private static let method_pageLoaded = "pageLoaded"
     
     public var chatView: WKWebView!
     private var callJs: Array<String>!
     private var didFinish: Bool = false
     private var widgetUrl: String = ""
+    private var css: String = ""
 
     private static func getUnreadedMessagesCallback(_ result: NSDictionary) -> NSDictionary {
         let resultWrapper = ChatApiMessagesWrapper(result)
@@ -209,7 +211,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return "{}"
     }
     
-    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true) {
+    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true, css: String = "") {
         if apiToken != "" {
             ChatConfig.setApiToken(apiToken)
         }
@@ -221,6 +223,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             setup["clientId"] = clientId
         }
         widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(domain)"
+        self.css = css
         var url = URL(string: widgetUrl)
         if url == nil {
             var encodeDomain = String(describing: domain.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
@@ -255,6 +258,22 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         chatView.load(URLRequest(url: url!))
         chatView.allowsBackForwardNavigationGestures = true
     }
+    
+    public func injectCss(style: String) {
+        if (style.isEmpty) {
+          return;
+        }
+
+        let injectCssTemplate = "(function() {" +
+            "var parent = document.getElementsByTagName('head').item(0);" +
+            "var style = document.createElement('style');" +
+            "style.type = 'text/css';" +
+            "style.innerHTML = '\(style)';" +
+            "parent.appendChild(style);" +
+        "})()";
+        
+        callJs(injectCssTemplate);
+      }
     
     public func callJsMethod(_ name: String, params: Array<Any>) {
         if didFinish {
@@ -326,6 +345,9 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         }
         let name = body!["name"] as! String
         switch name {
+            case ChatController.method_pageLoaded:
+                injectCss(style: self.css)
+                break
             case ChatController.event_closeSupport:
                 onCloseSupport()
                 break

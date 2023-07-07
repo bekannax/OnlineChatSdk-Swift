@@ -33,7 +33,8 @@ load(
     "en",
     "newClientId",
     "<Токен для доступа к Rest Api>",
-    "showCloseButton"
+    "showCloseButton",
+    "css"
 )
 ```
 
