@@ -169,6 +169,14 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 decisionHandler(.allow)
                 return
             }
+            if (
+                (navigationAction.request.url?.absoluteString.contains( "https://www.google.com/recaptcha/api2/anchor?" ))! ||
+                (navigationAction.request.url?.absoluteString.contains( "https://www.google.com/recaptcha/api/fallback?" ))! ||
+                (navigationAction.request.url?.absoluteString.contains( "https://www.google.com/recaptcha/api2/bframe?" ))!
+            ) {
+                decisionHandler(.allow)
+                return
+            }
         }
         decisionHandler(.cancel)
         onLinkPressed(url: navigationAction.request.url!)
@@ -224,14 +232,16 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         }
         widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(domain)"
         self.css = css
+
+//        var url = URL(string: widgetUrl)
+//        if url == nil {}
+        var encodeDomain = String(describing: domain.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
+        encodeDomain = encodeDomain.replacingOccurrences(of: "Optional(\"", with: "")
+        encodeDomain = encodeDomain.replacingOccurrences(of: "\")", with: "")
+        widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(encodeDomain)"
         var url = URL(string: widgetUrl)
-        if url == nil {
-            var encodeDomain = String(describing: domain.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
-            encodeDomain = encodeDomain.replacingOccurrences(of: "Optional(\"", with: "")
-            encodeDomain = encodeDomain.replacingOccurrences(of: "\")", with: "")
-            widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(encodeDomain)"
-            url = URL(string: widgetUrl)
-        }
+        
+        print("widgetUrl : \(widgetUrl)")
         var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
         if !setup.isEmpty {
             if (showCloseButton) {
@@ -269,7 +279,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             "var style = document.createElement('style');" +
             "style.type = 'text/css';" +
             "style.innerHTML = '\(style)';" +
-            "parent.appendChild(style);" +
+            "parent.appendChild(style) ;" +
         "})()";
         
         callJs(injectCssTemplate);
