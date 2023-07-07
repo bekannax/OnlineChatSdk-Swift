@@ -269,7 +269,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             "var style = document.createElement('style');" +
             "style.type = 'text/css';" +
             "style.innerHTML = '\(style)';" +
-            "parent.appendChild(style);" +
+            "parent.appendChild(style) ;" +
         "})()";
         
         callJs(injectCssTemplate);
