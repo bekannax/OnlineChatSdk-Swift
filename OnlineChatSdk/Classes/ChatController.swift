@@ -399,7 +399,9 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
 
     open func onLinkPressed(url: URL) {
-        UIApplication.shared.openURL(url)
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
     }
     
     open func playSound(_ systemSoundId: SystemSoundID) {
