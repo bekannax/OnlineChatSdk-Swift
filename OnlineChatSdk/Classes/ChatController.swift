@@ -35,6 +35,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private var callJs: Array<String>!
     private var didFinish: Bool = false
     private var widgetUrl: String = ""
+    private var widgetOrg: String = ""
     private var css: String = ""
 
     private static func getUnreadedMessagesCallback(_ result: NSDictionary) -> NSDictionary {
@@ -164,8 +165,23 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
 
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> ()) {
+//        print("widgetUrl = \(self.widgetUrl)")
+//        print("widgetOrg = \(self.widgetOrg)")
+//        print("absoluteString = \(navigationAction.request.url?.absoluteString)")
         if let _ = navigationAction.request.url?.host {
+            if (navigationAction.request.url?.absoluteString.contains(self.widgetOrg))! {
+                decisionHandler(.allow)
+                return
+            }
             if (navigationAction.request.url?.absoluteString.contains(self.widgetUrl))! {
+                decisionHandler(.allow)
+                return
+            }
+            if (
+                (navigationAction.request.url?.absoluteString.contains( "https://www.google.com/recaptcha/api2/anchor?" ))! ||
+                (navigationAction.request.url?.absoluteString.contains( "https://www.google.com/recaptcha/api/fallback?" ))! ||
+                (navigationAction.request.url?.absoluteString.contains( "https://www.google.com/recaptcha/api2/bframe?" ))!
+            ) {
                 decisionHandler(.allow)
                 return
             }
@@ -211,6 +227,55 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return "{}"
     }
     
+//    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true, css: String = "") {
+//        if apiToken != "" {
+//            ChatConfig.setApiToken(apiToken)
+//        }
+//        var setup: Dictionary<String, Any> = [:]
+//        if !language.isEmpty {
+//            setup["language"] = language
+//        }
+//        if !clientId.isEmpty {
+//            setup["clientId"] = clientId
+//        }
+//        widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(domain)"
+//        self.css = css
+//        var url = URL(string: widgetUrl)
+//        if url == nil {
+//            var encodeDomain = String(describing: domain.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
+//            encodeDomain = encodeDomain.replacingOccurrences(of: "Optional(\"", with: "")
+//            encodeDomain = encodeDomain.replacingOccurrences(of: "\")", with: "")
+//            widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(encodeDomain)"
+//            url = URL(string: widgetUrl)
+//        }
+//        var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
+//        if !setup.isEmpty {
+//            if (showCloseButton) {
+//                urlComponents?.queryItems = [
+//                    URLQueryItem(name: "setup", value: toJson(setup as AnyObject)),
+//                    URLQueryItem(name: "sdk-show-close-button", value: "1")
+//                ]
+//            } else {
+//                urlComponents?.queryItems = [
+//                    URLQueryItem(name: "setup", value: toJson(setup as AnyObject))
+//                ]
+//            }
+//        } else {
+//            if (showCloseButton) {
+//                urlComponents?.queryItems = [
+//                    URLQueryItem(name: "sdk-show-close-button", value: "1")
+//                ]
+//            }
+//        }
+//        url = urlComponents!.url!
+//        if url == nil {
+//            url = URL(string: widgetUrl)
+//        }
+//        chatView.load(URLRequest(url: url!))
+//        chatView.allowsBackForwardNavigationGestures = true
+//    }
+    
+    
     public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true, css: String = "") {
         if apiToken != "" {
             ChatConfig.setApiToken(apiToken)
@@ -222,16 +287,15 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         if !clientId.isEmpty {
             setup["clientId"] = clientId
         }
-        widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(domain)"
         self.css = css
-        var url = URL(string: widgetUrl)
-        if url == nil {
-            var encodeDomain = String(describing: domain.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
+        var encodeDomain: String = String(describing: domain.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
+        if (encodeDomain.contains("Optional(\"")) {
             encodeDomain = encodeDomain.replacingOccurrences(of: "Optional(\"", with: "")
             encodeDomain = encodeDomain.replacingOccurrences(of: "\")", with: "")
-            widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(encodeDomain)"
-            url = URL(string: widgetUrl)
         }
+        widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(encodeDomain)"
+        widgetOrg = "https://admin.verbox.ru/support/chat/\(id)/"
+        var url = URL(string: widgetUrl)
         var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
         if !setup.isEmpty {
             if (showCloseButton) {
