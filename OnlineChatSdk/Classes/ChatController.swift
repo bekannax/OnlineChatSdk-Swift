@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 import AVFoundation
 
+@available(iOS 13.0, *)
 open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
 
     public static let event_operatorSendMessage = "operatorSendMessage"
@@ -37,6 +38,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private var widgetUrl: String = ""
     private var widgetOrg: String = ""
     private var css: String = ""
+    private let activityIndicator = UIActivityIndicatorView(style: .large)
+
 
     private static func getUnreadedMessagesCallback(_ result: NSDictionary) -> NSDictionary {
         let resultWrapper = ChatApiMessagesWrapper(result)
@@ -151,9 +154,54 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         }
         chatView = WKWebView(frame: frame, configuration: config)
         chatView.navigationDelegate = self
+        
+        chatView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            chatView.topAnchor.constraint(equalTo: chatView.safeAreaLayoutGuide.topAnchor),
+            chatView.leadingAnchor.constraint(equalTo: chatView.safeAreaLayoutGuide.leadingAnchor),
+            chatView.trailingAnchor.constraint(equalTo: chatView.safeAreaLayoutGuide.trailingAnchor),
+            chatView.bottomAnchor.constraint(equalTo: chatView.safeAreaLayoutGuide.bottomAnchor)
+        ])
+
+//        // Настройки Activity Indicator
+        activityIndicator.hidesWhenStopped = true
+        chatView.addSubview(activityIndicator)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: chatView.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: chatView.centerYAnchor)
+        ])
+
         view = chatView
     }
 
+    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        activityIndicator.startAnimating()
+    }
+    
+    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+       activityIndicator.stopAnimating()
+        showMessage(error.localizedDescription)
+   }
+    
+    public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: any Error) {
+        activityIndicator.stopAnimating()
+        showMessage(error.localizedDescription)
+
+    }
+    
+    private func showMessage(_ message: String) {
+        let alert = UIAlertController(
+            title: nil,
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+            self.onCloseSupport()
+        })
+        present(alert, animated: true, completion: nil)
+    }
+    
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         didFinish = true
         if callJs != nil && !callJs.isEmpty {
@@ -162,6 +210,9 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             }
             callJs = nil
         }
+//        print("Завершение загрузки страницы.")
+        activityIndicator.stopAnimating()
+
     }
 
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> ()) {
