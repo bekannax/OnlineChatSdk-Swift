@@ -1,6 +1,6 @@
 import Foundation
 
-class ChatDateFormatter : DateFormatter {
+class ChatDateFormatter : DateFormatter, @unchecked Sendable {
 
     override init() {
         super.init()

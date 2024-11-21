@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import WebKit
+@preconcurrency import WebKit
 import AVFoundation
 
 @available(iOS 13.0, *)
@@ -514,7 +514,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
 
     open func onLinkPressed(url: URL) {
-        UIApplication.shared.openURL(url)
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
     
     open func playSound(_ systemSoundId: SystemSoundID) {
