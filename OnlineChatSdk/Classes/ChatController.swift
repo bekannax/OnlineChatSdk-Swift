@@ -31,7 +31,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     public static let method_getContacts = "getContacts"
     private static let method_destroy = "destroy"
     private static let method_pageLoaded = "pageLoaded"
-    
+
+
     public var chatView: WKWebView!
     private var callJs: Array<String>!
     private var didFinish: Bool = false
@@ -39,6 +40,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private var widgetOrg: String = ""
     private var css: String = ""
     private var alertLoading: UIAlertController?
+
 
     private static func getUnreadedMessagesCallback(_ result: NSDictionary) -> NSDictionary {
         let resultWrapper = ChatApiMessagesWrapper(result)
