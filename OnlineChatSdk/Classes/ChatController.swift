@@ -38,8 +38,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private var widgetUrl: String = ""
     private var widgetOrg: String = ""
     private var css: String = ""
-    private let activityIndicator = UIActivityIndicatorView(style: .large)
-
+    private var alertLoading: UIAlertController?
 
     private static func getUnreadedMessagesCallback(_ result: NSDictionary) -> NSDictionary {
         let resultWrapper = ChatApiMessagesWrapper(result)
@@ -155,37 +154,68 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         chatView = WKWebView(frame: frame, configuration: config)
         chatView.navigationDelegate = self
         
-        chatView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            chatView.topAnchor.constraint(equalTo: chatView.safeAreaLayoutGuide.topAnchor),
-            chatView.leadingAnchor.constraint(equalTo: chatView.safeAreaLayoutGuide.leadingAnchor),
-            chatView.trailingAnchor.constraint(equalTo: chatView.safeAreaLayoutGuide.trailingAnchor),
-            chatView.bottomAnchor.constraint(equalTo: chatView.safeAreaLayoutGuide.bottomAnchor)
-        ])
-
-//        // Настройки Activity Indicator
-        activityIndicator.hidesWhenStopped = true
-        chatView.addSubview(activityIndicator)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            activityIndicator.centerXAnchor.constraint(equalTo: chatView.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: chatView.centerYAnchor)
-        ])
-
         view = chatView
     }
+        
+    private func getAlertLoadingActionCloseTitle() -> String {
+        let currentLanguage = Locale.current.languageCode
+        if currentLanguage == "ru" {
+            return "Закрыть"
+        }
+        return "Close"
+    }
+    
+    private func showLoadingDialog() {
+        if alertLoading != nil {
+            return
+        }
+        alertLoading = UIAlertController(
+            title: nil,
+            message: " ",
+            preferredStyle: .alert
+        )
+        alertLoading?.addAction(UIAlertAction(title: getAlertLoadingActionCloseTitle(), style: .destructive, handler: cancelLoading))
+        
+        
+        let loadingIndicator = UIActivityIndicatorView(style: .medium)
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        loadingIndicator.startAnimating()
+
+        alertLoading?.view.addSubview(loadingIndicator)
+        
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: alertLoading!.view.centerXAnchor),
+            loadingIndicator.bottomAnchor.constraint(equalTo: alertLoading!.view.bottomAnchor, constant: -60)
+        ])
+        present(alertLoading!, animated: true)
+    }
+                        
+    private func cancelLoading(action: UIAlertAction) {
+        onCloseSupport()
+    }
+
+    private func hideLoadingDialog() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if self.alertLoading == nil {
+                return
+            }
+            self.alertLoading?.dismiss(animated: true, completion: nil)
+            self.alertLoading = nil
+        }
+    }
+
 
     public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        activityIndicator.startAnimating()
+        showLoadingDialog()
     }
     
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-       activityIndicator.stopAnimating()
+        hideLoadingDialog()
         showMessage(error.localizedDescription)
-   }
+    }
     
     public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: any Error) {
-        activityIndicator.stopAnimating()
+        hideLoadingDialog()
         showMessage(error.localizedDescription)
 
     }
@@ -210,9 +240,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             }
             callJs = nil
         }
-//        print("Завершение загрузки страницы.")
-        activityIndicator.stopAnimating()
-
+//        hideLoadingDialog()
     }
 
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> ()) {
@@ -438,6 +466,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        hideLoadingDialog()
         if message.name != "chatInterface" {
             return
         }
