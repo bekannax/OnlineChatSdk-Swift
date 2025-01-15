@@ -217,7 +217,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: any Error) {
         hideLoadingDialog()
         showMessage(error.localizedDescription)
-
     }
     
     private func showMessage(_ message: String) {
@@ -244,9 +243,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
 
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> ()) {
-//        print("widgetUrl = \(self.widgetUrl)")
-//        print("widgetOrg = \(self.widgetOrg)")
-//        print("absoluteString = \(navigationAction.request.url?.absoluteString)")
         if let _ = navigationAction.request.url?.host {
             if (navigationAction.request.url?.absoluteString.contains(self.widgetOrg))! {
                 decisionHandler(.allow)
@@ -528,18 +524,17 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         if chatView == nil {
             return
         }
+        chatView.stopLoading()
+        callJsDestroy()
+        chatView = nil
+        
         dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
     }
 
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-
-        if animated && chatView != nil {
-            chatView.stopLoading()
-            callJsDestroy()
-            chatView = nil
-        }
+        onCloseSupport()
     }
 
     open func onLinkPressed(url: URL) {
