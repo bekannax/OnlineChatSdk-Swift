@@ -134,6 +134,23 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             callback( ChatController.getNewMessagesCallback(result!) )
         })
     }
+    
+    public static func setInfoCustomDataValue(key: String, value: String, callback: @escaping (NSDictionary?) -> Void) {
+        DispatchQueue.global().async {
+            ChatApi.setInfo(
+                ChatConfig.getApiToken(),
+                [
+                    "client": [
+                        "id": ChatConfig.getClientId(),
+                        "customData": [
+                            key: value
+                        ]
+                    ],
+                ] as [String : Any],
+                callback: callback
+            )
+        }
+    }
 
     override public func loadView() {
         let contentController = WKUserContentController()
@@ -288,6 +305,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
     
     private func callJs(_ script: String) {
+        print("callJs : \(script)")
         chatView.evaluateJavaScript(script)
     }
     
@@ -487,6 +505,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         switch name {
             case ChatController.method_pageLoaded:
                 injectCss(style: self.css)
+                onChatWasOpen()
                 break
             case ChatController.event_closeSupport:
                 onCloseSupport()
@@ -520,6 +539,14 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         onEvent(name, data!)
     }
     
+    open func onChatWasOpen() {
+        
+    }
+    
+    open func onChatWasClosed() {
+        
+    }
+    
     open func onCloseSupport() {
         if chatView == nil {
             return
@@ -530,6 +557,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         
         dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
+        
+        onChatWasClosed()
     }
 
     open override func viewDidDisappear(_ animated: Bool) {

@@ -34,6 +34,11 @@ open class ChatApi {
         }
     }
     
+    public func setInfo(_ token: String, params: Dictionary<String, Any>, callback: @escaping (NSDictionary?) -> Void) {
+        send(token, "chat/client/setInfo", params, callback: callback)
+    }
+
+    
     public func messages(_ token: String, params: Dictionary<String, Any>, callback: @escaping (NSDictionary?) -> Void) {
         send(token, "chat/message/getList", params, callback: callback)
     }
@@ -52,5 +57,9 @@ open class ChatApi {
             "dateRange": ["start": dtFormatter.string(from: Date(timeIntervalSince1970: Date().timeIntervalSince1970  - 86400 * 14)), "stop": dtFormatter.string(from: Date())]
             ] as [String : Any]
         (ChatApi()).messages(token, params: params, callback: callback)
+    }
+    
+    public static func setInfo(_ token: String, _ params: Dictionary<String, Any>, callback: @escaping (NSDictionary?) -> Void) {
+        (ChatApi()).setInfo(token, params: params, callback: callback)
     }
 }
