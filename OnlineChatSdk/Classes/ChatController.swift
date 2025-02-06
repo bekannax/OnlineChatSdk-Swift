@@ -506,6 +506,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             case ChatController.method_pageLoaded:
                 injectCss(style: self.css)
                 onChatWasOpen()
+                listenApplicationState()
                 break
             case ChatController.event_closeSupport:
                 onCloseSupport()
@@ -539,6 +540,30 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         onEvent(name, data!)
     }
     
+    private func listenApplicationState() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appDidBecomeActive),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appWillResignActive),
+            name: UIApplication.willResignActiveNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func appDidBecomeActive() {
+        onChatWasOpen()
+    }
+
+    @objc private func appWillResignActive() {
+        onChatWasClosed()
+    }
+
+    
     open func onChatWasOpen() {
         
     }
@@ -557,6 +582,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         
         dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
+        NotificationCenter.default.removeObserver(self)
         
         onChatWasClosed()
     }
