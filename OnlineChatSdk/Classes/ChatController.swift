@@ -165,7 +165,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         config.preferences = preferences
         config.mediaPlaybackRequiresUserAction = false
         config.allowsInlineMediaPlayback = true
-        
 
         var frame = UIScreen.main.bounds
         if parent != nil && parent?.view != nil && parent?.view.bounds != nil {
