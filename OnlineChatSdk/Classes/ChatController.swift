@@ -270,14 +270,19 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
 
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> ()) {
+        if navigationAction.request.url == nil {
+            print("\(logTag) :: webView :: navigationAction :: 0")
+            decisionHandler(.cancel)
+            return
+        }
         if let _ = navigationAction.request.url?.host {
             if (navigationAction.request.url?.absoluteString.contains(self.widgetOrg))! {
-                print("\(logTag) :: webView :: navigationAction :: 1 :: \(navigationAction.request.url)")
+                print("\(logTag) :: webView :: navigationAction :: 1 :: \(navigationAction.request.url!)")
                 decisionHandler(.allow)
                 return
             }
             if (navigationAction.request.url?.absoluteString.contains(self.widgetUrl))! {
-                print("\(logTag) :: webView :: navigationAction :: 2 :: \(navigationAction.request.url)")
+                print("\(logTag) :: webView :: navigationAction :: 2 :: \(navigationAction.request.url!)")
                 decisionHandler(.allow)
                 return
             }
@@ -286,12 +291,12 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 (navigationAction.request.url?.absoluteString.contains( "https://www.google.com/recaptcha/api/fallback?" ))! ||
                 (navigationAction.request.url?.absoluteString.contains( "https://www.google.com/recaptcha/api2/bframe?" ))!
             ) {
-                print("\(logTag) :: webView :: navigationAction :: 3 :: \(navigationAction.request.url)")
+                print("\(logTag) :: webView :: navigationAction :: 3 :: \(navigationAction.request.url!)")
                 decisionHandler(.allow)
                 return
             }
         }
-        print("\(logTag) :: webView :: navigationAction :: 3 :: \(navigationAction.request.url)")
+        print("\(logTag) :: webView :: navigationAction :: 3 :: \(navigationAction.request.url!)")
         decisionHandler(.cancel)
         onLinkPressed(url: navigationAction.request.url!)
     }
@@ -621,7 +626,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
 
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        onCloseSupport()
+//        onCloseSupport()
+        print("\(logTag) :: viewDidDisappear")
     }
 
     open func onLinkPressed(url: URL) {
