@@ -181,7 +181,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         
         view = chatView
         
-        print("\(logTag) :: loadView")
+        // print("\(logTag) :: loadView")
     }
         
     private func getAlertLoadingActionCloseTitle() -> String {
