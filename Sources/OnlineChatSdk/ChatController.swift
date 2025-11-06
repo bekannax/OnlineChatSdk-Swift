@@ -169,7 +169,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
         config.preferences = preferences
-        config.mediaPlaybackRequiresUserAction = false
+        // config.mediaPlaybackRequiresUserAction = false
         config.allowsInlineMediaPlayback = true
 
         var frame = UIScreen.main.bounds
