@@ -2,7 +2,7 @@ import Foundation
 
 class ChatConfig {
 
-    private static var instance: ChatConfig?
+    nonisolated(unsafe) private static var instance: ChatConfig?
 
     private struct ConfigKeys {
         static let configKeyApiToken = "onlineChatSdkConfig_apiToken"

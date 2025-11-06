@@ -33,6 +33,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private static let method_pageLoaded = "pageLoaded"
 
     public var chatView: WKWebView!
+    private var contentController: WKUserContentController!
     private var callJs: Array<String>!
     private var didFinish: Bool = false
     private var widgetUrl: String = ""
@@ -41,6 +42,9 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private var alertLoading: UIAlertController?
     private let logTag = "OnlineChatSdk"
     private var isOnCloseSupport = false
+    
+    private var scrollView: UIScrollView!
+//    private var webViewBottomConstraint: NSLayoutConstraint!
 
     private static func getUnreadedMessagesCallback(_ result: NSDictionary) -> NSDictionary {
         let resultWrapper = ChatApiMessagesWrapper(result)
@@ -155,7 +159,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
 
     override public func loadView() {
-        let contentController = WKUserContentController()
+        contentController = WKUserContentController()
         contentController.add(self, name: "chatInterface")
 
         let preferences = WKPreferences()
@@ -206,9 +210,14 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
 
         alertLoading?.view.addSubview(loadingIndicator)
         
+        var constant: CGFloat = -60.0
+        if #available(iOS 26.0, *) {
+            constant = -80.0
+        }
+        
         NSLayoutConstraint.activate([
             loadingIndicator.centerXAnchor.constraint(equalTo: alertLoading!.view.centerXAnchor),
-            loadingIndicator.bottomAnchor.constraint(equalTo: alertLoading!.view.bottomAnchor, constant: -60)
+            loadingIndicator.bottomAnchor.constraint(equalTo: alertLoading!.view.bottomAnchor, constant: constant)
         ])
         present(alertLoading!, animated: true)
     }
@@ -613,8 +622,13 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             return
         }
         print("\(logTag) :: onCloseSupport :: 2")
+        
+        contentController.removeScriptMessageHandler(forName: "chatInterface")
+        contentController.removeAllUserScripts()
+        
         chatView.stopLoading()
         callJsDestroy()
+        contentController = nil
         chatView = nil
         
         dismiss(animated: true, completion: nil)
@@ -626,7 +640,9 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
 
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-//        onCloseSupport()
+        if isMovingFromParent || isBeingDismissed {
+            onCloseSupport()
+        }
         print("\(logTag) :: viewDidDisappear")
     }
 
