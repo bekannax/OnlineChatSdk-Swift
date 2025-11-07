@@ -1,3 +1,5 @@
+import Foundation
+
 class CheckConnection {
     
     private var tasks: [Task<String, Error>] = []
