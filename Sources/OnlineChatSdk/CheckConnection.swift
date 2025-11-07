@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 class CheckConnection {
     
     private var tasks: [Task<String, Error>] = []
