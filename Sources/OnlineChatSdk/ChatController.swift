@@ -419,7 +419,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 encodeDomain = encodeDomain.replacingOccurrences(of: "\")", with: "")
             }
 
-            let domain = await checkConnection.getDomain()
+            let domain = await self.checkConnection.getDomain()
             
             widgetUrl = "https://\(domain)/support/chat/\(id)/\(encodeDomain)"
             widgetOrg = "https://\(domain)/support/chat/\(id)/"
