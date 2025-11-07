@@ -7,10 +7,8 @@ class CheckConnection {
     private var needUseAlternativeUrl: Bool? = nil
     
     func getDomain() async -> String {
-        let resultNeedUseAlternativeUrl = try? await isNeedUseAlternativeUrl()
-        if resultNeedUseAlternativeUrl == nil {
-            return "admin.verbox.ru"
-        } else if resultNeedUseAlternativeUrl! {
+        let resultNeedUseAlternativeUrl = await isNeedUseAlternativeUrl()
+        if resultNeedUseAlternativeUrl {
             return "admin.verbox.me"
         }
         return "admin.verbox.ru"
