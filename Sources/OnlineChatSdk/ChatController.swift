@@ -45,7 +45,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private let checkConnection = CheckConnection()
     
     private var scrollView: UIScrollView!
-//    private var webViewBottomConstraint: NSLayoutConstraint!
+    private var webViewBottomConstraint: NSLayoutConstraint!
 
     private static func getUnreadedMessagesCallback(_ result: NSDictionary) -> NSDictionary {
         let resultWrapper = ChatApiMessagesWrapper(result)
@@ -159,7 +159,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         }
     }
 
-    override public func loadView() {
+    private func initialization() {
         contentController = WKUserContentController()
         contentController.add(self, name: "chatInterface")
 
@@ -172,17 +172,73 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         config.preferences = preferences
         // config.mediaPlaybackRequiresUserAction = false
         config.allowsInlineMediaPlayback = true
-
-        var frame = UIScreen.main.bounds
-        if parent != nil && parent?.view != nil && parent?.view.bounds != nil {
-            frame = (parent?.view.bounds)!
+        if !isResizeByKeyboard() {
+            var frame = UIScreen.main.bounds
+            if parent != nil && parent?.view != nil && parent?.view.bounds != nil {
+                frame = (parent?.view.bounds)!
+            }
+            chatView = WKWebView(frame: frame, configuration: config)
+            view = chatView
+        } else {
+            view = UIView()
+            chatView = WKWebView(frame: .zero, configuration: config)
+            chatView.translatesAutoresizingMaskIntoConstraints = false
+//            view = chatView
+            view.addSubview(chatView)
+            view.backgroundColor = .white
+            NSLayoutConstraint.activate([
+                chatView.topAnchor.constraint(equalTo: view.topAnchor),
+                chatView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                chatView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            ])
+            webViewBottomConstraint = chatView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            webViewBottomConstraint.isActive = true
+            chatView.scrollView.isScrollEnabled = false
         }
-        chatView = WKWebView(frame: frame, configuration: config)
+
+        chatView.scrollView.bounces = false
         chatView.navigationDelegate = self
-        
-        view = chatView
+    }
+    
+    override public func loadView() {
+        initialization()
+        setupKeyboardObservers()
         
         // print("\(logTag) :: loadView")
+    }
+    
+    private func setupKeyboardObservers() {
+        if !isResizeByKeyboard() {
+            return
+        }
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillChangeFrame(_:)),
+            name: UIResponder.keyboardWillChangeFrameNotification,
+            object: nil
+        )
+    }
+    
+    @objc private func keyboardWillChangeFrame(_ notification: Notification) {
+        if !isResizeByKeyboard() {
+            return
+        }
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else { return }
+        
+        let keyboardHeight = view.bounds.height - keyboardFrame.origin.y + getKeyboardPadding()
+        
+        UIView.animate(withDuration: duration) {
+            if keyboardHeight > 0 {
+                // Клавиатура появляется
+                self.webViewBottomConstraint.constant = -keyboardHeight + self.view.safeAreaInsets.bottom
+            } else {
+                // Клавиатура скрывается
+                self.webViewBottomConstraint.constant = 0
+            }
+            self.view.layoutIfNeeded()
+        }
     }
         
     private func getAlertLoadingActionCloseTitle() -> String {
@@ -609,7 +665,14 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     @objc private func appWillResignActive() {
         onChatWasClosed()
     }
-
+    
+    open func isResizeByKeyboard() -> Bool {
+        return false
+    }
+    
+    open func getKeyboardPadding() -> CGFloat {
+        return 34.0
+    }
     
     open func onChatWasOpen() {
         

@@ -15,7 +15,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/bekannax/OnlineChatSdk-Swift.git", from: "0.3.7"),
+        .package(url: "https://github.com/bekannax/OnlineChatSdk-Swift.git", from: "0.3.8"),
     ],
     targets: [
         .target(
