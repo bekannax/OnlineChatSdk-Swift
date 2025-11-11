@@ -1,4 +1,4 @@
-// swift-tools-version: 6.2
+// swift-tools-version: 5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -15,7 +15,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/bekannax/OnlineChatSdk-Swift.git", from: "0.3.8"),
+        .package(url: "https://github.com/bekannax/OnlineChatSdk-Swift.git", from: "0.3.9"),
     ],
     targets: [
         .target(
