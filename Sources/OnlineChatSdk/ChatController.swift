@@ -46,6 +46,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     
     private var scrollView: UIScrollView!
     private var webViewBottomConstraint: NSLayoutConstraint!
+    private var minimalBottonConstraintConstant: CGFloat = 0.0
 
     private static func getUnreadedMessagesCallback(_ result: NSDictionary) -> NSDictionary {
         let resultWrapper = ChatApiMessagesWrapper(result)
@@ -192,6 +193,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 chatView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
             webViewBottomConstraint = chatView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            minimalBottonConstraintConstant = webViewBottomConstraint.constant
             webViewBottomConstraint.isActive = true
             chatView.scrollView.isScrollEnabled = false
         }
@@ -227,15 +229,16 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
               let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
               let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else { return }
         
-        let keyboardHeight = view.bounds.height - keyboardFrame.origin.y + getKeyboardPadding()
+        var keyboardHeight = view.bounds.height - keyboardFrame.origin.y
+        if keyboardHeight > 0 {
+            keyboardHeight += getKeyboardPadding()
+        }
         
         UIView.animate(withDuration: duration) {
             if keyboardHeight > 0 {
-                // Клавиатура появляется
                 self.webViewBottomConstraint.constant = -keyboardHeight + self.view.safeAreaInsets.bottom
             } else {
-                // Клавиатура скрывается
-                self.webViewBottomConstraint.constant = 0
+                self.webViewBottomConstraint.constant = self.minimalBottonConstraintConstant
             }
             self.view.layoutIfNeeded()
         }
