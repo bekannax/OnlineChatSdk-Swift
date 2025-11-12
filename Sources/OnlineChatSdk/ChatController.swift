@@ -196,7 +196,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             if let window = UIApplication.shared.windows.first {
                 let topInset = window.safeAreaInsets.top
                 bottomInset = window.safeAreaInsets.bottom
-//                print("topInset = \(topInset); bottomInset = \(bottomInset)")
+                print("\(logTag) :: topInset = \(topInset); bottomInset = \(bottomInset)")
             }
             webViewBottomConstraint = chatView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
 //            webViewBottomConstraint.constant = -65.0
