@@ -47,7 +47,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private var scrollView: UIScrollView!
     private var webViewBottomConstraint: NSLayoutConstraint!
     private var minimalBottonConstraintConstant: CGFloat = 0.0
-    private var bottomInset: CGFloat = 0.0
+//    private var bottomInset: CGFloat = 0.0
+//    private var topInset: CGFloat = 0.0
 
     private static func getUnreadedMessagesCallback(_ result: NSDictionary) -> NSDictionary {
         let resultWrapper = ChatApiMessagesWrapper(result)
@@ -193,13 +194,12 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 chatView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 chatView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
-            if let window = UIApplication.shared.windows.first {
-                let topInset = window.safeAreaInsets.top
-                bottomInset = window.safeAreaInsets.bottom
-                print("\(logTag) :: topInset = \(topInset); bottomInset = \(bottomInset)")
-            }
+//            if let window = UIApplication.shared.windows.first {
+//                topInset = window.safeAreaInsets.top
+//                bottomInset = window.safeAreaInsets.bottom
+//            }
             webViewBottomConstraint = chatView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-//            webViewBottomConstraint.constant = -65.0
+//            webViewBottomConstraint.constant = -100.0
             minimalBottonConstraintConstant = webViewBottomConstraint.constant
             webViewBottomConstraint.isActive = true
             chatView.scrollView.isScrollEnabled = false
@@ -236,14 +236,10 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
               let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
               let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double else { return }
         
-        var keyboardHeight = view.bounds.height - keyboardFrame.origin.y
-        if keyboardHeight > 0 {
-            keyboardHeight += bottomInset
-        }
-        
+        let keyboardHeight = view.bounds.height - keyboardFrame.origin.y
         UIView.animate(withDuration: duration) {
             if keyboardHeight > 0 {
-                self.webViewBottomConstraint.constant = -keyboardHeight + self.view.safeAreaInsets.bottom
+                self.webViewBottomConstraint.constant = -keyboardHeight
             } else {
                 self.webViewBottomConstraint.constant = self.minimalBottonConstraintConstant
             }
