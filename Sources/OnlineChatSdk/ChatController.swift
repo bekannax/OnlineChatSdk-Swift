@@ -47,6 +47,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private var scrollView: UIScrollView!
     private var webViewBottomConstraint: NSLayoutConstraint!
     private var minimalBottonConstraintConstant: CGFloat = 0.0
+    private var bottomInset: CGFloat = 0.0
 
     private static func getUnreadedMessagesCallback(_ result: NSDictionary) -> NSDictionary {
         let resultWrapper = ChatApiMessagesWrapper(result)
@@ -192,7 +193,13 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 chatView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 chatView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
             ])
+            if let window = UIApplication.shared.windows.first {
+                let topInset = window.safeAreaInsets.top
+                bottomInset = window.safeAreaInsets.bottom
+//                print("topInset = \(topInset); bottomInset = \(bottomInset)")
+            }
             webViewBottomConstraint = chatView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+//            webViewBottomConstraint.constant = -65.0
             minimalBottonConstraintConstant = webViewBottomConstraint.constant
             webViewBottomConstraint.isActive = true
             chatView.scrollView.isScrollEnabled = false
@@ -231,7 +238,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         
         var keyboardHeight = view.bounds.height - keyboardFrame.origin.y
         if keyboardHeight > 0 {
-            keyboardHeight += getKeyboardPadding()
+            keyboardHeight += bottomInset
         }
         
         UIView.animate(withDuration: duration) {
@@ -671,10 +678,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     
     open func isResizeByKeyboard() -> Bool {
         return false
-    }
-    
-    open func getKeyboardPadding() -> CGFloat {
-        return 34.0
     }
     
     open func onChatWasOpen() {

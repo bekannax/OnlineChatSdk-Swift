@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'OnlineChatSdk'
-  s.version          = '0.4.0'
+  s.version          = '0.4.1'
   s.summary          = 'A small library containing a wrapper for the WKWebView.'
   s.swift_versions   = '5.0'
   s.homepage         = 'https://github.com/bekannax/OnlineChatSdk-Swift'
