@@ -2,6 +2,7 @@ import Foundation
 
 @MainActor
 class CheckConnection {
+
     private let check = "https://operator.me-talk.ru/cabinet/assets/operatorApplication/checkConnection.json"
     private let checkAlternative = "https://operator.verbox.me/cabinet/assets/operatorApplication/checkConnection.json"
     private var needUseAlternativeUrl: Bool? = nil
