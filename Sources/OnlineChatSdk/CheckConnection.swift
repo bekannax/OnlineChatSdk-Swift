@@ -1,12 +1,14 @@
 import Foundation
 
+@available(iOS 13.0, *)
 @MainActor
 class CheckConnection {
-
+    private var tasks: [Task<String, Error>] = []
+    private let lock = NSLock()
     private let check = "https://operator.me-talk.ru/cabinet/assets/operatorApplication/checkConnection.json"
     private let checkAlternative = "https://operator.verbox.me/cabinet/assets/operatorApplication/checkConnection.json"
     private var needUseAlternativeUrl: Bool? = nil
-    
+
     func getDomain() async -> String {
         let resultNeedUseAlternativeUrl = await isNeedUseAlternativeUrl()
         if resultNeedUseAlternativeUrl {
@@ -14,7 +16,7 @@ class CheckConnection {
         }
         return "admin.verbox.ru"
     }
-    
+
     func isNeedUseAlternativeUrl() async -> Bool {
         if needUseAlternativeUrl != nil {
             return needUseAlternativeUrl!
@@ -35,65 +37,86 @@ class CheckConnection {
         }
         return false
     }
-    
-    private func performSyncGetRequest(request: URLRequest) -> Bool {
-        let semaphore = DispatchSemaphore(value: 0)
-        var resultResponse: URLResponse?
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            resultResponse = response
-            semaphore.signal()
-        }
-        task.resume()
-        _ = semaphore.wait(timeout: .distantFuture)
-        if resultResponse != nil {
-            guard let httpResponse = resultResponse as? HTTPURLResponse else {
-                return false
-            }
-            return httpResponse.statusCode == 200
-        }
-        return false
+
+    func cancel() {
+        lock.lock()
+        defer { lock.unlock() }
+        cancelAllTasks()
     }
-    
+
     private func requestsAsync(urls: [URL]) async throws -> String {
         for url in urls {
-            var request = URLRequest(url: url, timeoutInterval: 2.0)
-            request.httpMethod = "GET"
-            request.addValue(UUID().uuidString, forHTTPHeaderField: "X-Request-ID")
-            do {
-                if #available(iOS 15.0, *) {
+            let task = Task<String, Error> {
+                var result: String = ""
+                try Task.checkCancellation()
+                var request = URLRequest(url: url, timeoutInterval: 2.0)
+                request.httpMethod = "GET"
+                request.addValue(UUID().uuidString, forHTTPHeaderField: "X-Request-ID")
+                do {
                     let (_, response) = try await URLSession.shared.data(for: request)
                     guard let httpResponse = response as? HTTPURLResponse,
                           httpResponse.statusCode == 200 else {
+                        try Task.checkCancellation()
                         return ""
                     }
                     if httpResponse.statusCode == 200 {
-                        return url.absoluteString
+                        result = httpResponse.url?.absoluteString ?? ""
+                    } else {
+                        result = ""
                     }
-                } else {
-                    if performSyncGetRequest(request: request) {
-                        return url.absoluteString
-                    }
+                } catch {
+                    result = ""
                 }
-            } catch {}
+                try Task.checkCancellation()
+//                if result.contains(check) {
+//                    result = ""
+//                }
+                return result
+            }
+            tasks.append(task)
         }
-        return ""
+
+        return try await withThrowingTaskGroup(of: String.self) { group in
+            for task in tasks {
+                group.addTask {
+                    return try await task.value
+                }
+            }
+
+            guard let result = try await group.next() else {
+                return ""
+            }
+            if !result.isEmpty {
+                cancelAllTasks()
+                group.cancelAll()
+                return result
+            } else {
+                guard let result = try await group.next() else {
+                    return ""
+                }
+                cancelAllTasks()
+                group.cancelAll()
+                return result
+            }
+        }
+    }
+
+    private func cancelAllTasks() {
+        tasks.forEach { $0.cancel() }
+        tasks.removeAll()
     }
 }
 
 
-
 //import Foundation
 //
-//@available(iOS 13.0, *)
 //@MainActor
-//class CheckConnectionOld {
-//    private var tasks: [Task<String, Error>] = []
-//    private let lock = NSLock()
+//class CheckConnection {
+//
 //    private let check = "https://operator.me-talk.ru/cabinet/assets/operatorApplication/checkConnection.json"
 //    private let checkAlternative = "https://operator.verbox.me/cabinet/assets/operatorApplication/checkConnection.json"
 //    private var needUseAlternativeUrl: Bool? = nil
-//    
+//
 //    func getDomain() async -> String {
 //        let resultNeedUseAlternativeUrl = await isNeedUseAlternativeUrl()
 //        if resultNeedUseAlternativeUrl {
@@ -101,7 +124,7 @@ class CheckConnection {
 //        }
 //        return "admin.verbox.ru"
 //    }
-//    
+//
 //    func isNeedUseAlternativeUrl() async -> Bool {
 //        if needUseAlternativeUrl != nil {
 //            return needUseAlternativeUrl!
@@ -122,72 +145,48 @@ class CheckConnection {
 //        }
 //        return false
 //    }
-//    
-//    func cancel() {
-//        lock.lock()
-//        defer { lock.unlock() }
-//        cancelAllTasks()
+//
+//    private func performSyncGetRequest(request: URLRequest) -> Bool {
+//        let semaphore = DispatchSemaphore(value: 0)
+//        var resultResponse: URLResponse?
+//
+//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+//            resultResponse = response
+//            semaphore.signal()
+//        }
+//        task.resume()
+//        _ = semaphore.wait(timeout: .distantFuture)
+//        if resultResponse != nil {
+//            guard let httpResponse = resultResponse as? HTTPURLResponse else {
+//                return false
+//            }
+//            return httpResponse.statusCode == 200
+//        }
+//        return false
 //    }
-//    
+//
 //    private func requestsAsync(urls: [URL]) async throws -> String {
 //        for url in urls {
-//            let task = Task<String, Error> {
-//                var result: String = ""
-//                try Task.checkCancellation()
-//                var request = URLRequest(url: url, timeoutInterval: 2.0)
-//                request.httpMethod = "GET"
-//                request.addValue(UUID().uuidString, forHTTPHeaderField: "X-Request-ID")
-//                do {
+//            var request = URLRequest(url: url, timeoutInterval: 2.0)
+//            request.httpMethod = "GET"
+//            request.addValue(UUID().uuidString, forHTTPHeaderField: "X-Request-ID")
+//            do {
+//                if #available(iOS 15.0, *) {
 //                    let (_, response) = try await URLSession.shared.data(for: request)
 //                    guard let httpResponse = response as? HTTPURLResponse,
 //                          httpResponse.statusCode == 200 else {
-//                        try Task.checkCancellation()
 //                        return ""
 //                    }
 //                    if httpResponse.statusCode == 200 {
-//                        result = httpResponse.url?.absoluteString ?? ""
-//                    } else {
-//                        result = ""
+//                        return url.absoluteString
 //                    }
-//                } catch {
-//                    result = ""
+//                } else {
+//                    if performSyncGetRequest(request: request) {
+//                        return url.absoluteString
+//                    }
 //                }
-//                try Task.checkCancellation()
-////                if result.contains(check) {
-////                    result = ""
-////                }
-//                return result
-//            }
-//            tasks.append(task)
+//            } catch {}
 //        }
-//        
-//        return try await withThrowingTaskGroup(of: String.self) { group in
-//            for task in tasks {
-//                group.addTask {
-//                    return try await task.value
-//                }
-//            }
-//            
-//            guard let result = try await group.next() else {
-//                return ""
-//            }
-//            if !result.isEmpty {
-//                cancelAllTasks()
-//                group.cancelAll()
-//                return result
-//            } else {
-//                guard let result = try await group.next() else {
-//                    return ""
-//                }
-//                cancelAllTasks()
-//                group.cancelAll()
-//                return result
-//            }
-//        }
-//    }
-//    
-//    private func cancelAllTasks() {
-//        tasks.forEach { $0.cancel() }
-//        tasks.removeAll()
+//        return ""
 //    }
 //}

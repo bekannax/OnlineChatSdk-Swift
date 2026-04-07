@@ -10,7 +10,7 @@ import UIKit
 @preconcurrency import WebKit
 import AVFoundation
 
-@available(iOS 13.0, *)
+//@available(iOS 13.0, *)
 open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
 
     public static let event_operatorSendMessage = "operatorSendMessage"
@@ -42,7 +42,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private var alertLoading: UIAlertController?
     private let logTag = "OnlineChatSdk"
     private var isOnCloseSupport = false
-    private let checkConnection = CheckConnection()
+    private var currentApiDomain = ""
     
     private var scrollView: UIScrollView!
     private var webViewBottomConstraint: NSLayoutConstraint!
@@ -255,6 +255,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return "Close"
     }
     
+    @available(iOS 13.0, *)
     private func showLoadingDialog() {
         if alertLoading != nil {
             return
@@ -301,7 +302,9 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
 
 
     public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        showLoadingDialog()
+        if #available(iOS 13.0, *) {
+            showLoadingDialog()
+        }
         print("\(logTag) :: webView :: didStartProvisionalNavigation")
     }
     
@@ -459,67 +462,77 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
 //        chatView.allowsBackForwardNavigationGestures = true
 //    }
     
+    private func loadTask(_ apiDomain: String, _ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true, css: String = "") {
+        print("\(logTag) :: load :: 1")
+        if apiToken != "" {
+            ChatConfig.setApiToken(apiToken)
+        }
+        var setup: Dictionary<String, Any> = [:]
+        if !language.isEmpty {
+            setup["language"] = language
+        }
+        if !clientId.isEmpty {
+            setup["clientId"] = clientId
+        }
+        self.css = css
+        var encodeDomain: String = String(describing: domain.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
+        if encodeDomain.contains("Optional(\"") {
+            encodeDomain = encodeDomain.replacingOccurrences(of: "Optional(\"", with: "")
+            encodeDomain = encodeDomain.replacingOccurrences(of: "\")", with: "")
+        }
+        widgetUrl = "https://\(apiDomain)/support/chat/\(id)/\(encodeDomain)"
+        widgetOrg = "https://\(apiDomain)/support/chat/\(id)/"
+        var url = URL(string: widgetUrl)
+        if url != nil {
+            var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
+            if !setup.isEmpty {
+                if (showCloseButton) {
+                    urlComponents?.queryItems = [
+                        URLQueryItem(name: "setup", value: toJson(setup as AnyObject)),
+                        URLQueryItem(name: "sdk-show-close-button", value: "1")
+                    ]
+                } else {
+                    urlComponents?.queryItems = [
+                        URLQueryItem(name: "setup", value: toJson(setup as AnyObject))
+                    ]
+                }
+            } else {
+                if (showCloseButton) {
+                    urlComponents?.queryItems = [
+                        URLQueryItem(name: "sdk-show-close-button", value: "1")
+                    ]
+                }
+            }
+            url = urlComponents!.url
+        }
+        if url == nil {
+            url = URL(string: widgetUrl)
+        }
+        if url == nil {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                self.showMessage("url=\(self.widgetUrl) not init")
+            }
+            return
+        }
+        chatView.load(URLRequest(url: url!))
+        chatView.allowsBackForwardNavigationGestures = true
+        print("\(logTag) :: load :: 2")
+    }
     
     public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true, css: String = "") {
-        showLoadingDialog()
-        Task {
-            print("\(logTag) :: load :: 1")
-            if apiToken != "" {
-                ChatConfig.setApiToken(apiToken)
-            }
-            var setup: Dictionary<String, Any> = [:]
-            if !language.isEmpty {
-                setup["language"] = language
-            }
-            if !clientId.isEmpty {
-                setup["clientId"] = clientId
-            }
-            self.css = css
-            var encodeDomain: String = String(describing: domain.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
-            if encodeDomain.contains("Optional(\"") {
-                encodeDomain = encodeDomain.replacingOccurrences(of: "Optional(\"", with: "")
-                encodeDomain = encodeDomain.replacingOccurrences(of: "\")", with: "")
-            }
-
-            let domain = await self.checkConnection.getDomain()
-            
-            widgetUrl = "https://\(domain)/support/chat/\(id)/\(encodeDomain)"
-            widgetOrg = "https://\(domain)/support/chat/\(id)/"
-            var url = URL(string: widgetUrl)
-            if url != nil {
-                var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
-                if !setup.isEmpty {
-                    if (showCloseButton) {
-                        urlComponents?.queryItems = [
-                            URLQueryItem(name: "setup", value: toJson(setup as AnyObject)),
-                            URLQueryItem(name: "sdk-show-close-button", value: "1")
-                        ]
-                    } else {
-                        urlComponents?.queryItems = [
-                            URLQueryItem(name: "setup", value: toJson(setup as AnyObject))
-                        ]
-                    }
-                } else {
-                    if (showCloseButton) {
-                        urlComponents?.queryItems = [
-                            URLQueryItem(name: "sdk-show-close-button", value: "1")
-                        ]
-                    }
+        if #available(iOS 13.0, *) {
+            showLoadingDialog()
+            Task {
+                var apiDomain = currentApiDomain
+                if apiDomain.isEmpty {
+                    let checkConnection = CheckConnection()
+                    apiDomain = await checkConnection.getDomain()
+                    currentApiDomain = apiToken
                 }
-                url = urlComponents!.url
+                loadTask(apiDomain, id, domain, language, clientId, apiToken, showCloseButton, css: css)
             }
-            if url == nil {
-                url = URL(string: widgetUrl)
-            }
-            if url == nil {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                    self.showMessage("url=\(self.widgetUrl) not init")
-                }
-                return
-            }
-            chatView.load(URLRequest(url: url!))
-            chatView.allowsBackForwardNavigationGestures = true
-            print("\(logTag) :: load :: 2")
+        } else {
+            loadTask("admin.verbox.ru", id, domain, language, clientId, apiToken, showCloseButton, css: css)
         }
     }
     
