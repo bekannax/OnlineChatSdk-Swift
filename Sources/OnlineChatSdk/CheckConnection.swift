@@ -3,6 +3,7 @@ import Foundation
 @available(iOS 13.0, *)
 @MainActor
 class CheckConnection {
+
     private var tasks: [Task<String, Error>] = []
     private let lock = NSLock()
     private let check = "https://operator.me-talk.ru/cabinet/assets/operatorApplication/checkConnection.json"
