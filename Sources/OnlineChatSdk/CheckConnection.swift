@@ -10,6 +10,7 @@ class CheckConnection {
     private let checkAlternative = "https://operator.verbox.me/cabinet/assets/operatorApplication/checkConnection.json"
     private var needUseAlternativeUrl: Bool? = nil
 
+
     func getDomain() async -> String {
         let resultNeedUseAlternativeUrl = await isNeedUseAlternativeUrl()
         if resultNeedUseAlternativeUrl {
