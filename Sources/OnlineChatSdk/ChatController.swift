@@ -13,6 +13,7 @@ import AVFoundation
 //@available(iOS 13.0, *)
 open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
 
+
     public static let event_operatorSendMessage = "operatorSendMessage"
     public static let event_clientSendMessage = "clientSendMessage"
     public static let event_clientMakeSubscribe = "clientMakeSubscribe"
