@@ -13,7 +13,6 @@ import AVFoundation
 //@available(iOS 13.0, *)
 open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
 
-
     public static let event_operatorSendMessage = "operatorSendMessage"
     public static let event_clientSendMessage = "clientSendMessage"
     public static let event_clientMakeSubscribe = "clientMakeSubscribe"
@@ -255,57 +254,13 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         }
         return "Close"
     }
-    
-    @available(iOS 13.0, *)
-    private func showLoadingDialog() {
-        if alertLoading != nil {
-            return
-        }
-        alertLoading = UIAlertController(
-            title: nil,
-            message: " ",
-            preferredStyle: .alert
-        )
-        alertLoading?.addAction(UIAlertAction(title: getAlertLoadingActionCloseTitle(), style: .destructive, handler: cancelLoading))
-        
-        
-        let loadingIndicator = UIActivityIndicatorView(style: .medium)
-        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
-        loadingIndicator.startAnimating()
-
-        alertLoading?.view.addSubview(loadingIndicator)
-        
-        var constant: CGFloat = -60.0
-        if #available(iOS 26.0, *) {
-            constant = -80.0
-        }
-        
-        NSLayoutConstraint.activate([
-            loadingIndicator.centerXAnchor.constraint(equalTo: alertLoading!.view.centerXAnchor),
-            loadingIndicator.bottomAnchor.constraint(equalTo: alertLoading!.view.bottomAnchor, constant: constant)
-        ])
-        present(alertLoading!, animated: true)
-    }
                         
     private func cancelLoading(action: UIAlertAction) {
         onCloseSupport()
     }
 
-    private func hideLoadingDialog() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            if self.alertLoading == nil {
-                return
-            }
-            self.alertLoading?.dismiss(animated: true, completion: nil)
-            self.alertLoading = nil
-        }
-    }
-
-
     public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        if #available(iOS 13.0, *) {
-            showLoadingDialog()
-        }
+        showLoadingDialog()
         print("\(logTag) :: webView :: didStartProvisionalNavigation")
     }
     
@@ -415,54 +370,6 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return "{}"
     }
     
-//    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true, css: String = "") {
-//        if apiToken != "" {
-//            ChatConfig.setApiToken(apiToken)
-//        }
-//        var setup: Dictionary<String, Any> = [:]
-//        if !language.isEmpty {
-//            setup["language"] = language
-//        }
-//        if !clientId.isEmpty {
-//            setup["clientId"] = clientId
-//        }
-//        widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(domain)"
-//        self.css = css
-//        var url = URL(string: widgetUrl)
-//        if url == nil {
-//            var encodeDomain = String(describing: domain.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
-//            encodeDomain = encodeDomain.replacingOccurrences(of: "Optional(\"", with: "")
-//            encodeDomain = encodeDomain.replacingOccurrences(of: "\")", with: "")
-//            widgetUrl = "https://admin.verbox.ru/support/chat/\(id)/\(encodeDomain)"
-//            url = URL(string: widgetUrl)
-//        }
-//        var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
-//        if !setup.isEmpty {
-//            if (showCloseButton) {
-//                urlComponents?.queryItems = [
-//                    URLQueryItem(name: "setup", value: toJson(setup as AnyObject)),
-//                    URLQueryItem(name: "sdk-show-close-button", value: "1")
-//                ]
-//            } else {
-//                urlComponents?.queryItems = [
-//                    URLQueryItem(name: "setup", value: toJson(setup as AnyObject))
-//                ]
-//            }
-//        } else {
-//            if (showCloseButton) {
-//                urlComponents?.queryItems = [
-//                    URLQueryItem(name: "sdk-show-close-button", value: "1")
-//                ]
-//            }
-//        }
-//        url = urlComponents!.url!
-//        if url == nil {
-//            url = URL(string: widgetUrl)
-//        }
-//        chatView.load(URLRequest(url: url!))
-//        chatView.allowsBackForwardNavigationGestures = true
-//    }
-    
     private func loadTask(_ apiDomain: String, _ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true, css: String = "") {
         print("\(logTag) :: load :: 1")
         if apiToken != "" {
@@ -521,8 +428,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     }
     
     public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true, css: String = "") {
+        showLoadingDialog()
         if #available(iOS 13.0, *) {
-            showLoadingDialog()
             Task {
                 var apiDomain = currentApiDomain
                 if apiDomain.isEmpty {
@@ -684,6 +591,50 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
 
     @objc private func appWillResignActive() {
         onChatWasClosed()
+    }
+    
+    open func showLoadingDialog() {
+        if alertLoading != nil {
+            return
+        }
+        alertLoading = UIAlertController(
+            title: nil,
+            message: " ",
+            preferredStyle: .alert
+        )
+        alertLoading?.addAction(UIAlertAction(title: getAlertLoadingActionCloseTitle(), style: .destructive, handler: cancelLoading))
+        
+        let loadingIndicator: UIActivityIndicatorView
+        if #available(iOS 13.0, *) {
+            loadingIndicator = UIActivityIndicatorView(style: .medium)
+        } else {
+            loadingIndicator = UIActivityIndicatorView(style: .gray)
+        }
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        loadingIndicator.startAnimating()
+
+        alertLoading?.view.addSubview(loadingIndicator)
+        
+        var constant: CGFloat = -60.0
+        if #available(iOS 26.0, *) {
+            constant = -80.0
+        }
+        
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: alertLoading!.view.centerXAnchor),
+            loadingIndicator.bottomAnchor.constraint(equalTo: alertLoading!.view.bottomAnchor, constant: constant)
+        ])
+        present(alertLoading!, animated: true)
+    }
+    
+    open func hideLoadingDialog() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            if self.alertLoading == nil {
+                return
+            }
+            self.alertLoading?.dismiss(animated: true, completion: nil)
+            self.alertLoading = nil
+        }
     }
     
     open func isResizeByKeyboard() -> Bool {
