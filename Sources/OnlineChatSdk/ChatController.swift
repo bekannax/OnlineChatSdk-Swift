@@ -389,8 +389,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             encodeDomain = encodeDomain.replacingOccurrences(of: "Optional(\"", with: "")
             encodeDomain = encodeDomain.replacingOccurrences(of: "\")", with: "")
         }
-        widgetUrl = "https://\(apiDomain)/support/chat/\(id)/\(encodeDomain)"
-        widgetOrg = "https://\(apiDomain)/support/chat/\(id)/"
+        widgetUrl = "https://\(apiDomain)/json/anonymous/online/sdk/\(id)/\(encodeDomain)"
+        widgetOrg = "https://\(apiDomain)/json/anonymous/online/sdk/\(id)/"
         var url = URL(string: widgetUrl)
         if url != nil {
             var urlComponents = URLComponents(url: url!, resolvingAgainstBaseURL: false)
