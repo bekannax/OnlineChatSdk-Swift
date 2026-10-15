@@ -6,6 +6,18 @@
 ![](https://github.com/bekannax/OnlineChatSdk-Swift/blob/master/images/2020-08-18_17-43-31.png?raw=true)
 
 ## Добавление в проект
+### Swift Package Manager
+1. Откройте в **Xcode** `File - Add Package Dependencies`;
+![](https://github.com/bekannax/OnlineChatSdk-Swift/blob/master/images/2026-10-15_18-50-16.jpg?raw=true)
+
+2. Вставье в строке поиска ссылку: `https://github.com/bekannax/OnlineChatSdk-Swift`;
+![](https://github.com/bekannax/OnlineChatSdk-Swift/blob/master/images/2026-10-15_18-50-33.jpg?raw=true)
+
+3. Укажите свой проект в `Add to project`, нажмите `Add Package`;
+![](https://github.com/bekannax/OnlineChatSdk-Swift/blob/master/images/2026-10-15_18-50-42.jpg?raw=true)
+
+4. Укажите `Target` и нажамите `Add Package`.
+### CocoaPods
 ```ruby
 pod 'OnlineChatSdk'
 ```
