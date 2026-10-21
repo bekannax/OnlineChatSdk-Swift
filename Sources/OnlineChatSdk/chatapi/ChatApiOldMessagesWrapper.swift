@@ -1,6 +1,6 @@
 import Foundation
 
-class ChatApiMessagesWrapper {
+class ChatApiOldMessagesWrapper {
 
     private var result: Dictionary<String, Any>?
     private var dataArray: Array<Dictionary<String, Any>>?

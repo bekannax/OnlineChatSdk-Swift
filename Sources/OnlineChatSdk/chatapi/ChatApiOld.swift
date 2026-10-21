@@ -1,5 +1,5 @@
 //
-//  ChatApi.swift
+//  ChatApiOld.swift
 //  OnlineChatSdk
 //
 //  Created by Andrew Blinov on 29/03/2019.
@@ -8,7 +8,8 @@
 
 import Foundation
 
-open class ChatApi {
+@available(*, deprecated)
+open class ChatApiOld {
     
     private func post(_ url: String, _ token: String,  _ params: Dictionary<String, Any>, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
         guard let url = URL(string: url) else { return }
@@ -56,10 +57,10 @@ open class ChatApi {
             "status": "unreaded",
             "dateRange": ["start": dtFormatter.string(from: Date(timeIntervalSince1970: Date().timeIntervalSince1970  - 86400 * 14)), "stop": dtFormatter.string(from: Date())]
             ] as [String : Any]
-        (ChatApi()).messages(token, params: params, callback: callback)
+        (ChatApiOld()).messages(token, params: params, callback: callback)
     }
     
     public static func setInfo(_ token: String, _ params: Dictionary<String, Any>, callback: @escaping (NSDictionary?) -> Void) {
-        (ChatApi()).setInfo(token, params: params, callback: callback)
+        (ChatApiOld()).setInfo(token, params: params, callback: callback)
     }
 }

@@ -10,7 +10,7 @@ import UIKit
 @preconcurrency import WebKit
 import AVFoundation
 
-//@available(iOS 13.0, *)
+//@available(iOS 15.0, *)
 open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
 
     public static let event_operatorSendMessage = "operatorSendMessage"
@@ -47,11 +47,20 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     private var scrollView: UIScrollView!
     private var webViewBottomConstraint: NSLayoutConstraint!
     private var minimalBottonConstraintConstant: CGFloat = 0.0
+
+    private let checkConnection = CheckConnection()
 //    private var bottomInset: CGFloat = 0.0
 //    private var topInset: CGFloat = 0.0
 
-    private static func getUnreadedMessagesCallback(_ result: NSDictionary) -> NSDictionary {
-        let resultWrapper = ChatApiMessagesWrapper(result)
+    public static func getUnreadedMessagesCount(
+        completion: @escaping (ChatApiGetClientUnreadMessageCountResponseModel) -> Void
+    ) {
+        ChatApi().getClientUnreadMessageCount(completion: completion)
+    }
+
+    @available(*, deprecated)
+    private static func getUnreadedMessagesCallbackOld(_ result: NSDictionary) -> NSDictionary {
+        let resultWrapper = ChatApiOldMessagesWrapper(result)
         if resultWrapper.getMessages().count == 0 {
             return resultWrapper.getResult()
         }
@@ -70,7 +79,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return resultWrapper.getResult()
     }
 
-    private static func getUnreadedMessages(_ startDate: String, _ clientId: String, _ token: String, callback: @escaping (NSDictionary?) -> Void) {
+    @available(*, deprecated)
+    private static func getUnreadedMessagesOld(_ startDate: String, _ clientId: String, _ token: String, callback: @escaping (NSDictionary?) -> Void) {
         if token == "" {
             callback([
                 "success": false,
@@ -89,7 +99,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 ]
             ])
         }
-        ChatApi().messages(token, params: [
+        ChatApiOld().messages(token, params: [
             "client": [
                 "clientId": clientId
             ],
@@ -100,22 +110,25 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 "stop": ChatDateFormatter().getCurrent()
             ]
         ] as [String: Any], callback: {(result) in
-            callback( ChatController.getUnreadedMessagesCallback(result!) )
+            callback( ChatController.getUnreadedMessagesCallbackOld(result!) )
         })
     }
 
-    public static func getUnreadedMessages(clientId: String, token: String, callback: @escaping (NSDictionary?) -> Void) {
+    @available(*, deprecated)
+    public static func getUnreadedMessagesOld(clientId: String, token: String, callback: @escaping (NSDictionary?) -> Void) {
         let startDate = ChatDateFormatter().string(from: Date(timeIntervalSince1970: TimeInterval(Int(NSDate().timeIntervalSince1970) - 86400 * 14)))
-        ChatController.getUnreadedMessages(startDate, clientId, token, callback: callback)
+        ChatController.getUnreadedMessagesOld(startDate, clientId, token, callback: callback)
     }
 
-    public static func getUnreadedMessages(callback: @escaping (NSDictionary?) -> Void) {
+    @available(*, deprecated)
+    public static func getUnreadedMessagesOld(callback: @escaping (NSDictionary?) -> Void) {
         let startDate = ChatDateFormatter().string(from: Date(timeIntervalSince1970: TimeInterval(Int(NSDate().timeIntervalSince1970) - 86400 * 14)))
-        ChatController.getUnreadedMessages(startDate, ChatConfig.getClientId(), ChatConfig.getApiToken(), callback: callback)
+        ChatController.getUnreadedMessagesOld(startDate, ChatConfig.getClientId(), ChatConfig.getApiToken(), callback: callback)
     }
 
-    private static func getNewMessagesCallback(_ result: NSDictionary) -> NSDictionary {
-        let resultWrapper = ChatApiMessagesWrapper(result)
+    @available(*, deprecated)
+    private static func getNewMessagesCallbackOld(_ result: NSDictionary) -> NSDictionary {
+        let resultWrapper = ChatApiOldMessagesWrapper(result)
         if resultWrapper.getMessages().count == 0 {
             return resultWrapper.getResult()
         }
@@ -126,28 +139,31 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return resultWrapper.getResult()
     }
 
-    public static func getNewMessages(clientId: String, token: String, callback: @escaping (NSDictionary?) -> Void) {
+    @available(*, deprecated)
+    public static func getNewMessagesOld(clientId: String, token: String, callback: @escaping (NSDictionary?) -> Void) {
         let startDate = ChatConfig.getLastDateTimeNewMessage()
         if startDate == "" {
-            self.getUnreadedMessages(clientId: clientId, token: token, callback: {(result) in
-                callback( ChatController.getNewMessagesCallback(result!) )
+            self.getUnreadedMessagesOld(clientId: clientId, token: token, callback: {(result) in
+                callback( ChatController.getNewMessagesCallbackOld(result!) )
             })
         } else {
-            self.getUnreadedMessages(startDate, clientId, token, callback: {(result) in
-                callback( ChatController.getNewMessagesCallback(result!) )
+            self.getUnreadedMessagesOld(startDate, clientId, token, callback: {(result) in
+                callback( ChatController.getNewMessagesCallbackOld(result!) )
             })
         }
     }
 
-    public static func getNewMessages(callback: @escaping (NSDictionary?) -> Void) {
-        self.getNewMessages(clientId: ChatConfig.getClientId(), token: ChatConfig.getApiToken(), callback: {(result) in
-            callback( ChatController.getNewMessagesCallback(result!) )
+    @available(*, deprecated)
+    public static func getNewMessagesOld(callback: @escaping (NSDictionary?) -> Void) {
+        self.getNewMessagesOld(clientId: ChatConfig.getClientId(), token: ChatConfig.getApiToken(), callback: {(result) in
+            callback( ChatController.getNewMessagesCallbackOld(result!) )
         })
     }
     
-    public static func setInfoCustomDataValue(key: String, value: String, callback: @escaping (NSDictionary?) -> Void) {
+    @available(*, deprecated)
+    public static func setInfoCustomDataValueOld(key: String, value: String, callback: @escaping (NSDictionary?) -> Void) {
         DispatchQueue.global().async {
-            ChatApi.setInfo(
+            ChatApiOld.setInfo(
                 ChatConfig.getApiToken(),
                 [
                     "client": [
@@ -370,11 +386,17 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return "{}"
     }
     
-    private func loadTask(_ apiDomain: String, _ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true, css: String = "") {
-        print("\(logTag) :: load :: 1")
+    @available(*, deprecated)
+    private func loadTaskOld(_ apiDomain: String, _ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true, css: String = "") {
         if apiToken != "" {
             ChatConfig.setApiToken(apiToken)
         }
+        loadTask(apiDomain, id, domain, language, clientId, showCloseButton, css: css)
+    }
+    
+    private func loadTask(_ apiDomain: String, _ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ showCloseButton: Bool = true, css: String = "") {
+        ChatConfig.setOrgId(id)
+        print("\(logTag) :: load :: 1")
         var setup: Dictionary<String, Any> = [:]
         if !language.isEmpty {
             setup["language"] = language
@@ -427,20 +449,37 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         print("\(logTag) :: load :: 2")
     }
     
-    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true, css: String = "") {
+    @available(*, deprecated)
+    public func loadOld(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ apiToken: String = "", _ showCloseButton: Bool = true, css: String = "") {
         showLoadingDialog()
         if #available(iOS 13.0, *) {
             Task {
                 var apiDomain = currentApiDomain
                 if apiDomain.isEmpty {
-                    let checkConnection = CheckConnection()
+
                     apiDomain = await checkConnection.getDomain()
-                    currentApiDomain = apiToken
+                    currentApiDomain = apiDomain
                 }
-                loadTask(apiDomain, id, domain, language, clientId, apiToken, showCloseButton, css: css)
+                loadTaskOld(apiDomain, id, domain, language, clientId, apiToken, showCloseButton, css: css)
             }
         } else {
-            loadTask("admin.verbox.ru", id, domain, language, clientId, apiToken, showCloseButton, css: css)
+            loadTaskOld("admin.verbox.ru", id, domain, language, clientId, apiToken, showCloseButton, css: css)
+        }
+    }
+    
+    public func load(_ id: String, _ domain: String, _ language: String = "", _ clientId: String = "", _ showCloseButton: Bool = true, css: String = "") {
+        showLoadingDialog()
+        if #available(iOS 13.0, *) {
+            Task {
+                var apiDomain = currentApiDomain
+                if apiDomain.isEmpty {
+                    apiDomain = await checkConnection.getDomain()
+                    currentApiDomain = apiDomain
+                }
+                loadTask(apiDomain, id, domain, language, clientId, showCloseButton, css: css)
+            }
+        } else {
+            loadTask("admin.verbox.ru", id, domain, language, clientId, showCloseButton, css: css)
         }
     }
     
@@ -542,7 +581,9 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 break
             case ChatController.event_clientId:
                 let clientId = data!["clientId"] != nil ? data!["clientId"] as! String : ""
+                let siteId = data!["siteId"] != nil ? data!["siteId"] as! String : ""
                 ChatConfig.setClientId(clientId)
+                ChatConfig.setSiteId(siteId)
                 onClientId(clientId)
                 break
             case ChatController.event_sendRate:
@@ -566,7 +607,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             default:
                 break
         }
-        print("\(logTag) :: userContentController :: \(data!)")
+        print("\(logTag) :: userContentController :: data :: \(data!)")
         onEvent(name, data!)
     }
     

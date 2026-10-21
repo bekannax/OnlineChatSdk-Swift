@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "OnlineChatSdk",
     platforms: [
-        .iOS(.v13)
+        .iOS(.v15)
     ],
     products: [
         .library(
@@ -15,7 +15,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/bekannax/OnlineChatSdk-Swift.git", from: "0.4.8"),
+        .package(url: "https://github.com/bekannax/OnlineChatSdk-Swift.git", from: "0.5.1"),
     ],
     targets: [
         .target(

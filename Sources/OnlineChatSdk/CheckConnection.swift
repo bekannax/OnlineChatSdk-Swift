@@ -18,6 +18,14 @@ class CheckConnection {
         }
         return "admin.verbox.ru"
     }
+    
+    func getApiDomain() async -> String {
+        let resultNeedUseAlternativeUrl = await isNeedUseAlternativeUrl()
+        if resultNeedUseAlternativeUrl {
+            return "widget.site-chat.me"
+        }
+        return "widget.apibcknd.com"
+    }
 
     func isNeedUseAlternativeUrl() async -> Bool {
         if needUseAlternativeUrl != nil {

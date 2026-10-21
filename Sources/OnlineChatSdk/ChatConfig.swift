@@ -5,9 +5,14 @@ class ChatConfig {
     nonisolated(unsafe) private static var instance: ChatConfig?
 
     private struct ConfigKeys {
-        static let configKeyApiToken = "onlineChatSdkConfig_apiToken"
-        static let configKeyClientId = "onlineChatSdkConfig_clientId"
+        
+        @available(*, deprecated)
+        static let configKeyApiTokenOld = "onlineChatSdkConfig_apiToken"
+        
         static let configKeyLastDateTimeNewMessage = "onlineChatSdkConfig_lastDateTimeNewMessage"
+        static let configKeyClientId = "onlineChatSdkConfig_clientId"
+        static let configKeySiteId = "onlineChatSdkConfig_siteId"
+        static let configKeyOrgId = "onlineChatSdkConfig_orgId"
     }
 
     private let config: UserDefaults
@@ -38,13 +43,31 @@ class ChatConfig {
     public static func getClientId() -> String {
         getInstance().getConfigString(ConfigKeys.configKeyClientId)
     }
-
-    public static func setApiToken(_ apiToken: String) {
-        getInstance().setConfig(ConfigKeys.configKeyApiToken, apiToken)
+    
+    public static func setSiteId(_ siteId: String) {
+        getInstance().setConfig(ConfigKeys.configKeySiteId, siteId)
     }
 
+    public static func getSiteId() -> String {
+        getInstance().getConfigString(ConfigKeys.configKeySiteId)
+    }
+    
+    public static func setOrgId(_ orgId: String) {
+        getInstance().setConfig(ConfigKeys.configKeyOrgId, orgId)
+    }
+
+    public static func getOrgId() -> String {
+        getInstance().getConfigString(ConfigKeys.configKeyOrgId)
+    }
+
+    @available(*, deprecated)
+    public static func setApiToken(_ apiToken: String) {
+        getInstance().setConfig(ConfigKeys.configKeyApiTokenOld, apiToken)
+    }
+
+    @available(*, deprecated)
     public static func getApiToken() -> String {
-        getInstance().getConfigString(ConfigKeys.configKeyApiToken)
+        getInstance().getConfigString(ConfigKeys.configKeyApiTokenOld)
     }
 
     private func setConfig(_ key: String, _ value: String) {
