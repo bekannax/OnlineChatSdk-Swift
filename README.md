@@ -141,7 +141,7 @@ override func getContactsCallback(_ data: NSDictionary) {
 
 ## Получение количества новых сообщений от оператора
 
-Чтобы получить информацию о новых сообщениях, когда виджет не запущен, в `ChatView` есть статичный метод **getUnreadMessagesCount**.
+Чтобы получить информацию о новых сообщениях, когда виджет не запущен, в `ChatController` есть статичный метод **getUnreadMessagesCount**.
 
 При успешном запросе метод возвращает `ChatApiGetClientUnreadMessageCountResponseModel`, где **result** — это количество непрочитанных сообщений.
 Если при запросе произошел сбой, то в **error** будет передан `ChatApiResponseErrorModel` с описанием ошибки.
