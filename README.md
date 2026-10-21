@@ -37,7 +37,7 @@ class MyController: ChatController {
     }
 }
 ```
-Так же при загрузке можно указать `language`, `clientId` и `apiToken`.
+Так же при загрузке можно указать `language` и `clientId`.
 ```swift
 load(
     "<Ваш id>", 
