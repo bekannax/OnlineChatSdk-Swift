@@ -44,7 +44,6 @@ load(
     "<Домен вашего сайта>",
     "en",
     "newClientId",
-    "<Токен для доступа к Rest Api>",
     "showCloseButton",
     "css"
 )
@@ -140,29 +139,14 @@ override func getContactsCallback(_ data: NSDictionary) {
 ```
 Подробное описание методов можно прочесть в разделе «Интеграция и API - Javascript API».
 
-## Получение token
-Перейдите в раздел «Интеграция и API - REST API», скопируйте существующий token или добавьте новый.
+## Получение количества новых сообщений от оператора
 
-![](https://github.com/bekannax/OnlineChatSdk-Android/blob/master/images/2019-04-01_18-32-22.png?raw=true)
+Чтобы получить информацию о новых сообщениях, когда виджет не запущен, в `ChatView` есть статичный метод **getUnreadMessagesCount**.
 
-## Получение новых сообщений от оператора
-Для получения новых сообщений, в `ChatController` есть два статичных метода `getUnreadedMessages` и `getNewMessages`.
+При успешном запросе метод возвращает `ChatApiGetClientUnreadMessageCountResponseModel`, где **result** — это количество непрочитанных сообщений.
+Если при запросе произошел сбой, то в **error** будет передан `ChatApiResponseErrorModel` с описанием ошибки.
 
-**getUnreadedMessages** - возвращает все непрочитанные сообщения.
-
-**getNewMessages** работает аналогичным образом, но при повторном запросе предыдущие сообщения уже не возвращаются. 
-
-Перед использование методов, нужно указать `apiToken`.
-
-```swift
-ChatController.getUnreadedMessages { data in }
-ChatController.getNewMessages { data in }
-```
-Формат `data` аналогичен ответу метода /chat/message/getList в Rest Api.
-
-Подробное описание можно прочесть в разделе «Интеграция и API - REST API - Инструкции по подключению».
-
-![](https://github.com/bekannax/OnlineChatSdk-Android/blob/master/images/2020-08-14_19-05-48.png?raw=true)
+##
 
 ## License
 
