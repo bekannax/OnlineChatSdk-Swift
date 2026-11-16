@@ -49,6 +49,7 @@ load(
 )
 ```
 
+
 ## События
  * **operatorSendMessage** - оператор отправил сообщение посетителю.
  * **clientSendMessage** - посетитель отправил сообщение оператору.
@@ -108,29 +109,112 @@ override func onEvent(_ name: String, _ data: NSDictionary) {
 ```
 
 ## Методы
- * **setClientInfo** - изменение информации о посетителе.
- * **setTarget** - пометить посетителя целевым.
- * **openReviewsTab** - отобразить форму для отзыва.
- * **openTab** - отобразить необходимую вкладку.
- * **sendMessage** - отправка сообщения от имени клиента.
- * **receiveMessage** - отправка сообщения от имени оператора.
- * **setOperator** - выбор любого оператора.
+ * **[setClientInfo](https://admin.integracio.ru/public/documentation/onlineChatWidget/setClientInfo)** - изменение информации о посетителе.
+ * **[setTarget](https://admin.integracio.ru/public/documentation/onlineChatWidget/setTarget)** - пометить посетителя целевым.
+ * **[openReviewsTab](https://admin.integracio.ru/public/documentation/onlineChatWidget/openReviewsTab)** - отобразить форму для отзыва.
+ * **[showTab](https://admin.integracio.ru/public/documentation/onlineChatWidget/showTab)** - открыть вкладку виджета.
+ * **[sendMessage](https://admin.integracio.ru/public/documentation/onlineChatWidget/sendMessage)** - отправка сообщения от имени клиента.
+ * **[receiveMessage](https://admin.integracio.ru/public/documentation/onlineChatWidget/receiveMessage)** - отправка сообщения от имени оператора.
+ * **[setOperator](https://admin.integracio.ru/public/documentation/onlineChatWidget/setOperator)** - выбор любого оператора.
  * **getContacts** - получение контактных данных.
 
 ```swift
-callJsSetClientInfo("{name: \"Имя\", email: \"test@mail.ru\"}")
+callJsSetClientInfo(
+    fields: [
+        "name": "Имя",
+        "phone": "8-900-000-00000",
+        "email": "polina@mail.ru",
+        "skype": "polina",
+        "questionCategory": "Категория вопроса",
+        "custom": [
+            "login": "u_polina",
+            "registrationDate": "2014-04-12 15:20:22",
+            "anotherKey": "Любая информация"
+        ]
+    ]
+) { result in
+    switch result {
+        case .success(let value):
+            print("success: \(value)")
+        case .failure(let error):
+            print("failure: \(error)")
+    }
+}
 
-callJsSetTarget("reason")
+callJsSetTarget(reason: "reason") { result in
+    switch result {
+        case .success(let value):
+            print("success: \(value)")
+        case .failure(let error):
+            print("failure: \(error)")
+    }
+}
 
-callJsOpenReviewsTab()
+callJsOpenReviewsTab() { result in
+    switch result {
+        case .success(let value):
+            print("success: \(value)")
+        case .failure(let error):
+            print("failure: \(error)")
+    }
+}
 
-callJsOpenTab(1)
+callJsShowTab(
+    options: [
+        "id": "",
+        "paymentSum": 0,
+        "paymentComment": "",
+    ]
+) { result in
+    switch result {
+        case .success(let value):
+            print("success: \(value)")
+        case .failure(let error):
+            print("failure: \(error)")
+    }
+}
 
-callJsSendMessage("Здравствуйте! У меня серьёзная проблема!")
+callJsSendMessage(
+    params: [
+        "text": "Добрый день",
+        "messageTypeId": ""
+    ]
+) { result in
+    switch result {
+        case .success(let value):
+            print("success: \(value)")
+        case .failure(let error):
+            print("failure: \(error)")
+    }
+}
 
-callJsReceiveMessage("Мы уже спешим на помощь ;)", "", 2000)
+callJsReceiveMessage(
+    params: [
+        "text": "Добрый день",
+        "operator": "my_operator",
+        "typingDuration": 5000,
+        "allowOfflineOperator": false
+    ]
+) { result in
+    switch result {
+        case .success(let value):
+            print("success: \(value)")
+        case .failure(let error):
+            print("failure: \(error)")
+    }
+}
 
-callJsSetOperator("Логин оператора")
+callJsSetOperator(
+    operator: String? = nil,
+    groupId: String? = nil,
+) { result in
+    switch result {
+        case .success(let value):
+            print("success: \(value)")
+        case .failure(let error):
+            print("failure: \(error)")
+    }
+}
 
 callJsGetContacts() // результат прилетает в getContactsCallback
 override func getContactsCallback(_ data: NSDictionary) {

@@ -25,6 +25,7 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     public static let method_setTarget = "setTarget"
     public static let method_openReviewsTab = "openReviewsTab"
     public static let method_openTab = "openTab"
+    public static let method_showTab = "showTab"
     public static let method_sendMessage = "sendMessage"
     public static let method_receiveMessage = "receiveMessage"
     public static let method_setOperator = "setOperator"
@@ -34,7 +35,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
 
     public var chatView: WKWebView!
     private var contentController: WKUserContentController!
-    private var callJs: Array<String>!
+    private var callJsOld: Array<String> = []
+    private var callJs: Array<JsCommand> = []
     private var didFinish: Bool = false
     private var widgetUrl: String = ""
     private var widgetOrg: String = ""
@@ -306,11 +308,19 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
     
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         didFinish = true
-        if callJs != nil && !callJs.isEmpty {
-            for script in callJs {
-                callJs(script)
+        if !callJsOld.isEmpty {
+            for script in callJsOld {
+                callJsOld(script)
             }
-            callJs = nil
+            callJsOld.removeAll()
+        }
+        if !callJs.isEmpty {
+            Task {
+                for command in callJs {
+                    await callJs(script: command.script, arguments: command.arguments, completionHandler: command.completionHandler)
+                }
+                callJs.removeAll()
+            }
         }
         print("\(logTag) :: webView :: didFinish")
 //        hideLoadingDialog()
@@ -348,7 +358,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         onLinkPressed(url: navigationAction.request.url!)
     }
 
-    private func getCallJsMethod(_ name: String, params: Array<Any>) -> String {
+    @available(*, deprecated)
+    private func getCallJsMethodOld(_ name: String, params: Array<Any>) -> String {
         var res: String = "window.MeTalk('"
         res.append(name)
         res.append("'")
@@ -357,8 +368,8 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
                 res.append(",")
                 if p is Int {
                     res.append(String(describing: p))
-                } else if p is Command {
-                    res.append((p as! Command).command)
+                } else if p is JsCommandOld {
+                    res.append((p as! JsCommandOld).command)
                 } else {
                     res.append("'")
                     res.append(String(describing: p))
@@ -370,9 +381,36 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
         return res
     }
     
-    private func callJs(_ script: String) {
-        print("\(logTag) :: callJs :: \(script)")
+    private func getCallJsMethod(name: String, arguments: [String: Any] = [:]) -> String {
+        if arguments.isEmpty {
+            return "window.MeTalk('\(name)')"
+        }
+        var res: String = "window.MeTalk('\(name)'"
+        arguments.forEach { (key: String, value: Any) in
+            res.append(", \(key)")
+        }
+        res.append(")")
+        return res
+    }
+    
+    @available(*, deprecated)
+    private func callJsOld(_ script: String) {
+        print("\(logTag) :: callJsOld :: \(script.count) :: \(script)")
         chatView.evaluateJavaScript(script)
+    }
+    
+    private func callJs(
+        script: String,
+        arguments: [String: Any] = [:],
+        completionHandler: (@MainActor @Sendable (Result<Any, any Error>) -> Void)? = nil
+    ) async {
+        chatView.callAsyncJavaScript(
+            script,
+            arguments: arguments,
+            in: nil,
+            in: .page,
+            completionHandler: completionHandler
+        )
     }
     
     private func toJson(_ jsonObj: AnyObject) -> String {
@@ -496,58 +534,154 @@ open class ChatController: UIViewController, WKNavigationDelegate, WKScriptMessa
             "parent.appendChild(style) ;" +
         "})()";
         
-        callJs(injectCssTemplate);
-      }
+        callJsOld(injectCssTemplate);
+    }
     
-    public func callJsMethod(_ name: String, params: Array<Any>) {
+    @available(*, deprecated)
+    public func callJsMethodOld(_ name: String, params: Array<Any>) {
         if didFinish {
-            callJs(getCallJsMethod(name, params: params))
+            callJsOld(getCallJsMethodOld(name, params: params))
         } else {
-            if callJs == nil {
-                callJs = []
-            }
-            callJs.append(getCallJsMethod(name, params: params))
+            callJsOld.append(getCallJsMethodOld(name, params: params))
         }
     }
     
-    public func callJsSetClientInfo(_ jsonInfo: String) {
-        callJsMethod(ChatController.method_setClientInfo, params: [Command(jsonInfo)])
+    public func callJsMethod(
+        name: String,
+        argument: Any? = nil,
+        result: (@MainActor @Sendable (Result<Any, any Error>) -> Void)? = nil
+    ) async {
+        let arguments: [String: Any]
+        if argument != nil {
+            arguments = ["argument": argument!]
+        } else {
+            arguments = [:]
+        }
+        let script = getCallJsMethod(name: name, arguments: arguments)
+        if didFinish {
+            await callJs(script: script, arguments: arguments, completionHandler: result)
+        } else {
+            callJs.append(JsCommand(script, arguments, result))
+        }
     }
     
-    public func callJsSetTarget(_ reason: String) {
-        callJsMethod(ChatController.method_setTarget, params: [reason])
+    public func callJsMethod(
+        name: String,
+        arguments: [String: Any?]? = nil,
+        result: (@MainActor @Sendable (Result<Any, any Error>) -> Void)? = nil
+    ) async {
+        var notNullArguments: [String: Any] = [:]
+        if arguments != nil {
+            arguments?.forEach { (key: String, value: Any?) in
+                if value != nil {
+                    notNullArguments[key] = value
+                }
+            }
+        }
+        let script = getCallJsMethod(name: name, arguments: notNullArguments)
+        if didFinish {
+            await callJs(script: script, arguments: notNullArguments, completionHandler: result)
+        } else {
+            callJs.append(JsCommand(script, notNullArguments, result))
+        }
     }
     
-    public func callJsOpenReviewsTab() {
-        callJsMethod(ChatController.method_openReviewsTab, params: [])
+    public func callJsSetClientInfo(
+        fields: [String: Any?],
+        result: (@MainActor @Sendable (Result<Any, any Error>) -> Void)? = nil
+    ) async {
+        await callJsMethod(name: ChatController.method_setClientInfo, argument: fields, result: result)
     }
     
-    public func callJsOpenTab(_ index: Int) {
-        callJsMethod(ChatController.method_openTab, params: [index])
+    public func callJsSetTarget(
+        reason: String,
+        result: (@MainActor @Sendable (Result<Any, any Error>) -> Void)? = nil
+    ) async {
+        await callJsMethod(name: ChatController.method_setTarget, argument: reason, result: result)
     }
     
-    public func callJsSendMessage(_ text: String) {
-        callJsMethod(ChatController.method_sendMessage, params: [text])
+    public func callJsOpenReviewsTab(
+        result: (@MainActor @Sendable (Result<Any, any Error>) -> Void)? = nil
+    ) async {
+        await callJsMethod(name: ChatController.method_openReviewsTab, argument: nil, result: result)
     }
     
-    public func callJsReceiveMessage(_ text: String, _ oper: String, _ simulateTyping: Int) {
-        callJsMethod(ChatController.method_receiveMessage, params: [text, oper, simulateTyping])
+    public func callJsShowTab(
+        options: [String: Any?],
+        result: (@MainActor @Sendable (Result<Any, any Error>) -> Void)? = nil
+    ) async {
+        await callJsMethod(name: ChatController.method_showTab, argument: options, result: result)
     }
     
-    public func callJsSetOperator(_ login: String) {
-        callJsMethod(ChatController.method_setOperator, params: [login])
+    public func callJsSendMessage(
+        params: [String: Any?],
+        result: (@MainActor @Sendable (Result<Any, any Error>) -> Void)? = nil
+    ) async {
+        await callJsMethod(name: ChatController.method_sendMessage, argument: params, result: result)
+    }
+    
+    public func callJsReceiveMessage(
+        params: [String: Any?],
+        result: (@MainActor @Sendable (Result<Any, any Error>) -> Void)? = nil
+    ) async {
+        await callJsMethod(name: ChatController.method_receiveMessage, argument: params, result: result)
+    }
+    
+    public func callJsSetOperator(
+        operator: String? = nil, // ID или логин оператора
+        groupId: String? = nil, // ID отдела
+        result: (@MainActor @Sendable (Result<Any, any Error>) -> Void)? = nil
+    ) async {
+        await callJsMethod(name: ChatController.method_setOperator, arguments: ["operator": `operator`, "groupId": groupId], result: result)
     }
     
     public func callJsGetContacts() {
-        callJsMethod(ChatController.method_getContacts, params: [Command("window.getContactsCallback")])
+        callJsMethodOld(ChatController.method_getContacts, params: [JsCommandOld("window.getContactsCallback")])
+    }
+    
+    @available(*, deprecated)
+    public func callJsSetClientInfoOld(_ jsonInfo: String) {
+        callJsMethodOld(ChatController.method_setClientInfo, params: [JsCommandOld(jsonInfo)])
+    }
+    
+    @available(*, deprecated)
+    public func callJsSetTargetOld(_ reason: String) {
+        callJsMethodOld(ChatController.method_setTarget, params: [reason])
+    }
+    
+    @available(*, deprecated)
+    public func callJsOpenReviewsTabOld() {
+        callJsMethodOld(ChatController.method_openReviewsTab, params: [])
+    }
+    
+    @available(*, deprecated)
+    public func callJsOpenTabOld(_ index: Int) {
+        callJsMethodOld(ChatController.method_openTab, params: [index])
+    }
+    
+    @available(*, deprecated)
+    public func callJsSendMessageOld(_ text: String) {
+        callJsMethodOld(ChatController.method_sendMessage, params: [text])
+    }
+    
+    @available(*, deprecated)
+    public func callJsReceiveMessageOld(_ text: String, _ oper: String, _ simulateTyping: Int) {
+        callJsMethodOld(ChatController.method_receiveMessage, params: [text, oper, simulateTyping])
+    }
+    
+    @available(*, deprecated)
+    public func callJsSetOperatorOld(_ login: String) {
+        callJsMethodOld(ChatController.method_setOperator, params: [login])
     }
 
     private func callJsDestroy() {
         print("\(logTag) :: callJsDestroy")
-        callJsMethod(ChatController.method_destroy, params: [])
+        callJsMethodOld(ChatController.method_destroy, params: [])
     }
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+//        print("\(logTag) :: userContentController :: message.body=\(message.body)")
+        
         hideLoadingDialog()
         if message.name != "chatInterface" {
             return

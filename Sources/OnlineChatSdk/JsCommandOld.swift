@@ -1,5 +1,5 @@
 //
-//  Command.swift
+//  JsCommandOld.swift
 //  OnlineChatSdk
 //
 //  Created by Andrew Blinov on 26/03/2019.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Command {
+public struct JsCommandOld {
     let command: String
     
     init(_ command: String) {
